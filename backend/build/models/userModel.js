@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (function (sequelise, dataTypes) {
-    var User = sequelise.define('user', {
+export default (sequelise, dataTypes) => {
+    const User = sequelise.define('user', {
         username: {
             type: dataTypes.STRING,
             allowNull: false,
@@ -17,4 +15,4 @@ exports.default = (function (sequelise, dataTypes) {
         },
     }, { timestamps: true });
     return User;
-});
+};

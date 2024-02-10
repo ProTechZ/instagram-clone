@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "rootDir": "./src",
-    "outDir": "./build",
+    "rootDir": "src",
+    "outDir": "build",
     "module": "NodeNext",
+    "noEmit": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true

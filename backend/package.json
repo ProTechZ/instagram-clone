@@ -2,9 +2,10 @@
   "name": "app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/app.js",
   "scripts": {
-    "start": "tsc ./src/app.ts --watch --esModuleInterop true"
+    "start": "nodemon build/app.js",
+    "dev": "tsc --watch"
   },
   "type": "module",
   "author": "",
