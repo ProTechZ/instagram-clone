@@ -4,6 +4,9 @@ import db from '../models/index.js';
 const User = db.userModel;
 export const signUp = async (req, res) => {
     try {
+        console.log('-------------signup-----------------\n');
+        const users = await User.findAll();
+        console.log('All users:', JSON.stringify(users, null, 2));
         const { username, email, password } = req.body;
         const data = {
             username: username,
@@ -21,7 +24,7 @@ export const signUp = async (req, res) => {
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
-        console.log('user', JSON.stringify(user, null, 2));
+        console.log('\n------------------------signup end-------------------------');
         return res.status(200).json({ user: user, token: token });
     }
     catch (err) {
@@ -40,7 +43,7 @@ export const logIn = async (req, res) => {
             return res.status(401).json({ msg: 'email doesnt exist' });
         }
         const passwordCorrect = await bcrypt.compare(password, password /*user.password*/);
-        if (!passwordCorrect) {
+        if (passwordCorrect) {
             return res.status(401).json({ msg: 'password is incorrect' });
         }
         let token = jwt.sign({ id: 123 /*user.id*/ }, process.env.secretKey, {

@@ -2,6 +2,7 @@ import db from '../models/index.js';
 const User = db.userModel;
 const saveUser = async (req, res, next) => {
     try {
+        console.log('-------------saveuser-----------------\n');
         const username = await User.findOne({
             where: {
                 username: req.body.username,
@@ -19,10 +20,11 @@ const saveUser = async (req, res, next) => {
             return res.status(409).json({ msg: 'email already in use' });
         }
         next();
+        console.log('\n------------saveuser end----------------');
     }
     catch (err) {
         console.log(err);
-        return res.status(400).json({ from: "userAuth", err: err, });
+        return res.status(400).json({ from: 'userAuth', err: err });
     }
 };
 export default saveUser;
