@@ -7,12 +7,23 @@ export default (sequelise, dataTypes) => {
         email: {
             type: dataTypes.STRING,
             unique: true,
-            allowNull: false
+            allowNull: false,
         },
         password: {
             type: dataTypes.STRING,
             allowNull: false,
         },
+        birthday: {
+            type: dataTypes.DATE,
+            allowNull: false,
+        },
+        avatar: {
+            type: dataTypes.STRING,
+            defaultValue: 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-media-1677509740',
+        },
+        // followers: {
+        //   type: dataTypes.ARRAY()
+        // }
     }, { timestamps: true });
     return User;
 };

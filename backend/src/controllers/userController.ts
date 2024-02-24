@@ -1,78 +1,77 @@
-import bcrypt from 'bcrypt';
-import jwt, { JsonWebTokenError, VerifyErrors } from 'jsonwebtoken';
-import db from '../models/index.js';
-import { Request, Response } from 'express';
+// import bcrypt from 'bcrypt';
+// import jwt from 'jsonwebtoken';
+// import { Request, Response } from 'express';
 
-const User = db.userModel;
+// const User = db.userModel;
 
-export const signUp = async (req: Request, res: Response) => {
-  try {
-    const { username, email, password } = req.body;
-    const data = {
-      username: username as string,
-      email: email as string,
-      password: await bcrypt.hash(password, 10),
-    };
+// export const signUp = async (req: Request, res: Response) => {
+//   try {
+//     const { username, email, password } = req.body;
+//     const data = {
+//       username: username as string,
+//       email: email as string,
+//       password: await bcrypt.hash(password, 10),
+//     };
 
-    const user = await User.create(data);
+//     const user = await User.create(data);
 
-    if (!user) {
-      return res.status(409).send('Details are not correct');
-    }
+//     if (!user) {
+//       return res.status(409).send('Details are not correct');
+//     }
 
-    let token = jwt.sign({ id: user.get('id') }, process.env.SECRET_KEY!, {
-      expiresIn: 1 * 24 * 60 * 60 * 1000,
-    });
+//     let token = jwt.sign({ id: user.get('id') }, process.env.SECRET_KEY!, {
+//       expiresIn: 1 * 24 * 60 * 60 * 1000,
+//     });
 
-    res.cookie('jwt', token, {
-      maxAge: 1 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
+//     res.cookie('jwt', token, {
+//       maxAge: 1 * 24 * 60 * 60 * 1000,
+//       httpOnly: true,
+//     });
 
-    return res.status(200).send({ user: user });
-  } catch (err) {
-    return res.status(400).send({ from: 'signup', err: err });
-  }
-};
+//     return res.status(200).send({ user: user });
+//   } catch (err) {
+//     return res.status(400).send({ from: 'signup', err: err });
+//   }
+// };
 
-export const logIn = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
+// export const logIn = async (req: Request, res: Response) => {
+//   try {
+//     const { email, password } = req.body;
 
-    const user = await User.findOne({
-      where: {
-        email: email,
-      },
-    });
+//     const user = await User.findOne({
+//       where: {
+//         email: email,
+//       },
+//     });
 
-    if (!user) {
-      return res.status(401).send({ msg: 'email doesnt exist' });
-    }
+//     if (!user) {
+//       return res.status(401).send({ msg: 'email doesnt exist' });
+//     }
 
-    const passwordCorrect = await bcrypt.compare(
-      password,
-      user.get('password') as string
-    );
+//     const passwordCorrect = await bcrypt.compare(
+//       password,
+//       user.get('password') as string
+//     );
 
-    if (!passwordCorrect) {
-      return res.status(401).send({ msg: 'password is incorrect' });
-    }
+//     if (!passwordCorrect) {
+//       return res.status(401).send({ msg: 'password is incorrect' });
+//     }
 
-    const { jwt: jwtToken } = req.cookies;
+//     const { jwt: jwtToken } = req.cookies;
 
-    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-      if (err) {
-        console.log('ERROR: Could not connect to the protected route');
-        return res.status(403).json('jwt token auth failed');
-      } else {
-        console.log('SUCCESS: Connected to protected route');
-        return res.status(200).send({
-          user: user,
-          decoded,
-        });
-      }
-    });
-  } catch (error) {
-    return res.status(400).send({ from: 'login', err: error });
-  }
-};
+//     jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
+//       if (err) {
+//         console.log('ERROR: Could not connect to the protected route');
+//         return res.status(403).json('jwt token auth failed');
+//       } else {
+//         console.log('SUCCESS: Connected to protected route');
+//         return res.status(200).send({
+//           user: user,
+//           decoded,
+//         });
+//       }
+//     });
+//   } catch (error) {
+//     return res.status(400).send({ from: 'login', err: error });
+//   }
+// };
