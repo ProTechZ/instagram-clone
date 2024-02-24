@@ -4,9 +4,6 @@ import db from '../models/index.js';
 const User = db.userModel;
 export const signUp = async (req, res) => {
     try {
-        console.log('-------------signup-----------------\n');
-        const users = await User.findAll();
-        console.log('All users:', JSON.stringify(users, null, 2));
         const { username, email, password } = req.body;
         const data = {
             username: username,
@@ -17,18 +14,17 @@ export const signUp = async (req, res) => {
         if (!user) {
             return res.status(409).send('Details are not correct');
         }
-        let token = jwt.sign({ id: 123 /*user.id*/ }, process.env.SECRET_KEY, {
+        let token = jwt.sign({ id: user.get('id') }, process.env.SECRET_KEY, {
             expiresIn: 1 * 24 * 60 * 60 * 1000,
         });
         res.cookie('jwt', token, {
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
-        console.log('\n------------------------signup end-------------------------');
-        return res.status(200).json({ user: user, token: token });
+        return res.status(200).send({ user: user });
     }
     catch (err) {
-        return res.status(400).json({ from: 'signup', err: err });
+        return res.status(400).send({ from: 'signup', err: err });
     }
 };
 export const logIn = async (req, res) => {
@@ -40,20 +36,28 @@ export const logIn = async (req, res) => {
             },
         });
         if (!user) {
-            return res.status(401).json({ msg: 'email doesnt exist' });
+            return res.status(401).send({ msg: 'email doesnt exist' });
         }
-        const passwordCorrect = await bcrypt.compare(password, password /*user.password*/);
-        if (passwordCorrect) {
-            return res.status(401).json({ msg: 'password is incorrect' });
+        const passwordCorrect = await bcrypt.compare(password, user.get('password'));
+        if (!passwordCorrect) {
+            return res.status(401).send({ msg: 'password is incorrect' });
         }
-        let token = jwt.sign({ id: 123 /*user.id*/ }, process.env.secretKey, {
-            expiresIn: 1 * 24 * 60 * 60 * 1000,
+        const { jwt: jwtToken } = req.cookies;
+        jwt.verify(jwtToken, process.env.SECRET_KEY, (err, decoded) => {
+            if (err) {
+                console.log('ERROR: Could not connect to the protected route');
+                return res.status(403).json('jwt token auth failed');
+            }
+            else {
+                console.log('SUCCESS: Connected to protected route');
+                return res.status(200).send({
+                    user: user,
+                    decoded,
+                });
+            }
         });
-        res.cookie('jwt', token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-        console.log('user', JSON.stringify(user, null, 2));
-        return res.status(201).json({ user: user, token: token });
     }
     catch (error) {
-        return res.status(400).json({ from: 'login', err: error });
+        return res.status(400).send({ from: 'login', err: error });
     }
 };
