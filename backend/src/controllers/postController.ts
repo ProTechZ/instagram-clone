@@ -36,7 +36,7 @@
 //         console.log('ERROR: Could not connect to the protected route');
 //         return res.status(403).json('jwt token auth failed');
 //       }
-//     });
+    // });
 
     
 

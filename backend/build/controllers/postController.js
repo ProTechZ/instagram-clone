@@ -33,7 +33,7 @@ export {};
 //         console.log('ERROR: Could not connect to the protected route');
 //         return res.status(403).json('jwt token auth failed');
 //       }
-//     });
+// });
 //     return res.status(200).send('post created');
 //   } catch (error) {
 //     return res.status(400).send({ from: 'createPost', err: error });

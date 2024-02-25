@@ -1,77 +1,99 @@
-// import bcrypt from 'bcrypt';
-// import jwt from 'jsonwebtoken';
-// import { Request, Response } from 'express';
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { v4 } from 'uuid';
+import pool from '../pg.js';
+import bcrypt from 'bcrypt';
 
-// const User = db.userModel;
+export const signUp = async (req: Request, res: Response) => {
+  try {
+    const { firstName, lastName, username, email, birthday, password } =
+      req.body;
 
-// export const signUp = async (req: Request, res: Response) => {
-//   try {
-//     const { username, email, password } = req.body;
-//     const data = {
-//       username: username as string,
-//       email: email as string,
-//       password: await bcrypt.hash(password, 10),
-//     };
+    const avatar = req.body.avatar
+      ? req.body.avatar
+      : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-media-1677509740';
 
-//     const user = await User.create(data);
+    const data = [
+      firstName,
+      lastName,
+      username,
+      email,
+      avatar,
+      birthday,
+      await bcrypt.hash(password, 10),
+    ];
 
-//     if (!user) {
-//       return res.status(409).send('Details are not correct');
-//     }
+    let token = jwt.sign({ id: v4() }, process.env.SECRET_KEY!, {
+      expiresIn: 1 * 24 * 60 * 60 * 1000,
+    });
 
-//     let token = jwt.sign({ id: user.get('id') }, process.env.SECRET_KEY!, {
-//       expiresIn: 1 * 24 * 60 * 60 * 1000,
-//     });
+    res.cookie('jwt', token, {
+      maxAge: 1 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
 
-//     res.cookie('jwt', token, {
-//       maxAge: 1 * 24 * 60 * 60 * 1000,
-//       httpOnly: true,
-//     });
+    pool.query(
+      'INSERT INTO users (first_name, last_name, username, email, avatar, birthday, password)' +
+        ' VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING * ',
+      data,
+      (err, results) => {
+        if (err) {
+          return res.status(400).send(err);
+        }
 
-//     return res.status(200).send({ user: user });
-//   } catch (err) {
-//     return res.status(400).send({ from: 'signup', err: err });
-//   }
-// };
+        return res
+          .status(201)
+          .send(`User added with ID: ${results.rows[0].user_id}`);
+      }
+    );
+  } catch (err) {
+    return res.status(400).send({ from: 'createUser', err });
+  }
+};
 
-// export const logIn = async (req: Request, res: Response) => {
-//   try {
-//     const { email, password } = req.body;
+export const logIn = async (req: Request, res: Response) => {
+  try {
+    const { usernameEmail, password } = req.body;
 
-//     const user = await User.findOne({
-//       where: {
-//         email: email,
-//       },
-//     });
+    // be able to log in with username or email
+    let query = 'username';
+    if ((usernameEmail as string).includes('@')) {
+      query = 'email';
+    }
 
-//     if (!user) {
-//       return res.status(401).send({ msg: 'email doesnt exist' });
-//     }
+    pool.query(
+      `SELECT * FROM users WHERE ${query} = $1`,
+      [usernameEmail],
+      async (err, results) => {
+        if (err) {
+          return res.status(400).send(err);
+        } else if (results.rows.length <= 0) {
+          return res.status(400).send('no user with that username or email');
+        }
 
-//     const passwordCorrect = await bcrypt.compare(
-//       password,
-//       user.get('password') as string
-//     );
+        const user = results.rows[0];
+        const passwordCorrect = await bcrypt.compare(password, user.password);
 
-//     if (!passwordCorrect) {
-//       return res.status(401).send({ msg: 'password is incorrect' });
-//     }
+        if (!passwordCorrect) {
+          return res.status(401).send('password is incorrect');
+        }
 
-//     const { jwt: jwtToken } = req.cookies;
+        const { jwt: jwtToken } = req.cookies;
 
-//     jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-//       if (err) {
-//         console.log('ERROR: Could not connect to the protected route');
-//         return res.status(403).json('jwt token auth failed');
-//       } else {
-//         console.log('SUCCESS: Connected to protected route');
-//         return res.status(200).send({
-//           user: user,
-//           decoded,
-//         });
-//       }
-//     });
-//   } catch (error) {
-//     return res.status(400).send({ from: 'login', err: error });
-//   }
-// };
+        jwt.verify(
+          jwtToken,
+          process.env.SECRET_KEY!,
+          (err: any, decoded: any) => {
+            if (err) {
+              return res.status(403).send('jwt token auth failed');
+            } else {
+              return res.status(200).send({ msg: 'logged in', user, decoded });
+            }
+          }
+        );
+      }
+    );
+  } catch (err) {
+    return res.status(400).send({ from: 'login', err });
+  }
+};

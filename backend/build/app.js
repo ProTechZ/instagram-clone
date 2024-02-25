@@ -1,11 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import { createUser } from './postgre.js';
-// import db from './models/index.js';
-// import saveUser from './middleware/userAuth.js';
-// import { logIn, signUp } from './controllers/userController.js';
-// import { createPost } from './controllers/postController.js';
+import { logIn, signUp } from './controllers/userController.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 dotenv.config({ path: '../env' });
@@ -16,15 +12,11 @@ app.use(cookieParser());
 process.on('uncaughtException', function (err) {
     console.log(err);
 });
-// db.sequelize.sync().then(() => {
-//   console.log('db has been re sync');
-// });
 app.get('/', (req, res) => {
     res.json({ message: 'Home!' });
 });
-app.post('/signup', createUser);
-// app.post('/login', logIn);
-// app.post('/create-post', createPost);
+app.post('/signup', signUp);
+app.post('/login', logIn);
 app.listen(PORT, () => {
     console.log(`app listening on port ${PORT}`);
 });

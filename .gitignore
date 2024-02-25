@@ -6,6 +6,7 @@
 
 /build
 
+*.txt
 .env
 .DS_Store
 .env.local
