@@ -1,9 +1,9 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import { logIn, signUp } from './controllers/accounts.controller.js';
 import accountsRouter from './routes/accounts.route.js';
 import usersRouter from './routes/users.route.js';
+import postsRouter from './routes/posts.route.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 dotenv.config({ path: '../env' });
@@ -19,8 +19,7 @@ app.get('/', (req, res) => {
 });
 app.use('/account', accountsRouter);
 app.use('/users', usersRouter);
-app.post('/signup', signUp);
-app.post('/login', logIn);
+app.use('/posts', postsRouter);
 app.listen(PORT, () => {
     console.log(`app listening on port ${PORT}`);
 });

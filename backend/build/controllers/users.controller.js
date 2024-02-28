@@ -12,12 +12,10 @@ export const getUser = async (req, res) => {
             const { jwt: jwtToken } = req.cookies;
             jwt.verify(jwtToken, process.env.SECRET_KEY, (err, decoded) => {
                 if (err) {
-                    return res.status(403).send({ logged_in: false, user, posts });
+                    return res.status(403).send({ is_user: false, user, posts });
                 }
                 else {
-                    return res
-                        .status(200)
-                        .send({ logged_in: true, posts, ...decoded });
+                    return res.status(200).send({ is_user: true, posts, ...decoded });
                 }
             });
         });

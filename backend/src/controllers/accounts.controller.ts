@@ -33,8 +33,7 @@ export const signUp = async (req: Request, res: Response) => {
     });
 
     pool.query(
-      'INSERT INTO users (first_name, last_name, username, email, avatar, birthday, password)' +
-        ' VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING * ',
+      'INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING * ',
       data,
       (err, results) => {
         if (err) {

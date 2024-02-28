@@ -24,8 +24,7 @@ export const signUp = async (req, res) => {
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
-        pool.query('INSERT INTO users (first_name, last_name, username, email, avatar, birthday, password)' +
-            ' VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING * ', data, (err, results) => {
+        pool.query('INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING * ', data, (err, results) => {
             if (err) {
                 return res.status(400).send(err);
             }

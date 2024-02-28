@@ -1,6 +1,5 @@
-import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { v4 } from 'uuid';
+import { Request, Response } from 'express';
 import pool from '../configs/postgres.config.js';
 
 export const getUser = async (req: Request, res: Response) => {
@@ -25,11 +24,9 @@ export const getUser = async (req: Request, res: Response) => {
           process.env.SECRET_KEY!,
           (err: any, decoded: any) => {
             if (err) {
-              return res.status(403).send({ logged_in: false, user, posts });
+              return res.status(403).send({ is_user: false, user, posts });
             } else {
-              return res
-                .status(200)
-                .send({ logged_in: true, posts, ...decoded });
+              return res.status(200).send({ is_user: true, posts, ...decoded });
             }
           }
         );
