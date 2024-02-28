@@ -1,7 +1,10 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import { logIn, signUp } from './controllers/userController.js';
+
+import { logIn, signUp } from './controllers/accounts.controller.js';
+import accountsRouter from './routes/accounts.route.js';
+import usersRouter from './routes/users.route.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,10 +19,12 @@ process.on('uncaughtException', function (err) {
   console.log(err);
 });
 
-
 app.get('/', (req, res) => {
-  res.json({ message: 'Home!' });
+  res.send('Home Screen!');
 });
+
+app.use('/account', accountsRouter);
+app.use('/users', usersRouter);
 
 app.post('/signup', signUp);
 app.post('/login', logIn);
