@@ -4,11 +4,11 @@ import pool from '../configs/postgres.config.js';
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const userId = req.params.userId;
 
     pool.query(
       'SELECT * FROM posts WHERE user_id = $1',
-      [id],
+      [userId],
       (err, results) => {
         if (err) {
           return res.status(400).send({ err });
@@ -50,30 +50,35 @@ export const updateUser = async (req: Request, res: Response) => {
       }
     });
 
-    const id = req.params.id;
-    const { valueToUpdate, updateValue } = req.body;
+    const userId = req.params.userId;
+    const fieldToUpdate = Object.keys(req.body)[0];
+    const updatedValue = Object.values(req.body)[0];
 
     if (
-      valueToUpdate != 'first_name' &&
-      valueToUpdate != 'last_name' &&
-      valueToUpdate != 'username' &&
-      valueToUpdate != 'email' &&
-      valueToUpdate != 'avatar' &&
-      valueToUpdate != 'birthday'
+      fieldToUpdate != 'first_name' &&
+      fieldToUpdate != 'last_name' &&
+      fieldToUpdate != 'username' &&
+      fieldToUpdate != 'email' &&
+      fieldToUpdate != 'avatar' &&
+      fieldToUpdate != 'birthday'
     ) {
       return res
         .status(400)
         .send({ updated: false, err: 'invalid field to update' });
+    } else if (!updatedValue) {
+      return res.status(400).send({ updated: false, err: 'no update value' });
     }
 
     pool.query(
-      `UPDATE users SET ${valueToUpdate} = '${updateValue}' WHERE user_id = ${id}`,
+      `UPDATE users SET ${fieldToUpdate} = '${updatedValue}' WHERE user_id = ${userId}`,
       (err, results) => {
         if (err) {
           return res.status(400).send({ updated: false, err });
         }
 
-        return res.status(200).send({ updated: true });
+        return res
+          .status(200)
+          .send({ updated: true, updatedUser: results.rows[0] });
       }
     );
   } catch (err) {
@@ -93,15 +98,20 @@ export const deleteUser = async (req: Request, res: Response) => {
       }
     });
 
-    const id = req.params.id;
+    const userId = req.params.userId;
 
-    pool.query(`DELETE FROM users WHERE user_id = ${id}`, (err, results) => {
-      if (err) {
-        return res.status(400).send({ deleted: false, err });
+    pool.query(
+      `DELETE FROM users WHERE user_id = ${userId}`,
+      (err, results) => {
+        if (err) {
+          return res.status(400).send({ deleted: false, err });
+        }
+
+        return res
+          .status(200)
+          .send({ deleted: true, deletedUser: results.rows[0] });
       }
-
-      return res.status(200).send({ deleted: true });
-    });
+    );
   } catch (err) {
     return res.status(400).send({ from: 'deleteUser', err });
   }

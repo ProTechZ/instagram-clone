@@ -8,10 +8,10 @@ import userExists from '../middleware/userExists.js';
 
 const router = express.Router();
 
-router.get('/:id', userExists, getUser);
+router.get('/:userId', userExists, getUser);
 
-router.put('/:id', userExists, updateUser);
+router.put('/:userId', userExists, updateUser);
 
-router.delete('/:id', userExists, deleteUser);
+router.delete('/:userId', userExists, deleteUser);
 
 export default router;

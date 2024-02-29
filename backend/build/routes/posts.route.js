@@ -1,8 +1,10 @@
 import express from 'express';
-import { createPost } from '../controllers/posts.controller.js';
+import { getPost, createPost, updatePost, deletePost, } from '../controllers/posts.controller.js';
 import userExists from '../middleware/userExists.js';
+import postExists from '../middleware/postExists.js';
 const router = express.Router();
-router.post('/new-post/user:id', userExists, createPost);
-// router.put('/:id', userExists, updateUser);
-// router.delete('/:id', userExists, deleteUser);
+router.post('/new-post/user:userId', userExists, createPost);
+router.get('/:postId', postExists, getPost);
+router.put('/:postId', postExists, updatePost);
+router.delete('/:postId', deletePost);
 export default router;

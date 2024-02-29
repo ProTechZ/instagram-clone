@@ -1,7 +1,7 @@
 import pool from '../configs/postgres.config.js';
 const userExists = (req, res, next) => {
-    const id = req.params.id;
-    pool.query('SELECT * FROM users WHERE user_id = $1', [id], (err, results) => {
+    const userId = req.params.userId;
+    pool.query('SELECT * FROM users WHERE user_id = $1', [userId], (err, results) => {
         if (err) {
             return res.status(400).send(err);
         }

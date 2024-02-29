@@ -1,15 +1,21 @@
 import express from 'express';
 import {
-  createPost
+  getPost,
+  createPost,
+  updatePost,
+  deletePost,
 } from '../controllers/posts.controller.js';
 import userExists from '../middleware/userExists.js';
+import postExists from '../middleware/postExists.js';
 
 const router = express.Router();
 
-router.post('/new-post/user:id', userExists, createPost);
+router.post('/new-post/user:userId', userExists, createPost);
 
-// router.put('/:id', userExists, updateUser);
+router.get('/:postId', postExists, getPost);
 
-// router.delete('/:id', userExists, deleteUser);
+router.put('/:postId', postExists, updatePost);
+
+router.delete('/:postId', deletePost);
 
 export default router;
