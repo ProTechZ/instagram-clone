@@ -10,9 +10,8 @@ export const createPost = async (req, res) => {
         });
         const { image, caption } = req.body;
         const user = res.locals.user;
-        const data = [user.user_id, image, caption, 0, new Date()];
-        pool.query('INSERT INTO posts (user_id, image, caption, likes, date_posted)' +
-            ' VALUES($1, $2, $3, $4, $5) RETURNING * ', data, (err, results) => {
+        pool.query('INSERT INTO posts (user_id, image, caption, num_likes, date_posted)' +
+            ' VALUES($1, $2, $3, $4, $5) RETURNING * ', [user.user_id, image, caption, 0, new Date()], (err, results) => {
             if (err) {
                 return res.status(400).send(err);
             }
@@ -52,7 +51,7 @@ export const updatePost = async (req, res) => {
         const updatedValue = Object.values(req.body)[0];
         if (fieldToUpdate != 'image' &&
             fieldToUpdate != 'caption' &&
-            fieldToUpdate != 'likes') {
+            fieldToUpdate != 'num_likes') {
             return res
                 .status(400)
                 .send({ updated: false, err: 'invalid field to update' });
