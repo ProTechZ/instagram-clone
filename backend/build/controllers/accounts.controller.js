@@ -65,10 +65,20 @@ export const logIn = async (req, res) => {
             });
             res.cookie('jwt', token, {
                 maxAge: 1 * 24 * 60 * 60 * 1000,
-                httpOnly: true,
+                httpOnly: false,
+                // domain: 'http://localhost:3000/login',
             });
             return res.status(200).send({ logged_in: true, user });
         });
+    }
+    catch (err) {
+        return res.status(400).send({ from: 'login', err });
+    }
+};
+export const logOut = async (req, res) => {
+    try {
+        res.clearCookie('session.sig');
+        return res.status(200).send({ logged_out: true });
     }
     catch (err) {
         return res.status(400).send({ from: 'login', err });

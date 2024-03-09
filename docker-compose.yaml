@@ -18,3 +18,13 @@ services:
       - '80:80'
     depends_on:
       - db
+  
+  client:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - '3000:3000'
+    depends_on:
+      - server

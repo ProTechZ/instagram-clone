@@ -46,7 +46,7 @@ export const signUp = async (req: Request, res: Response) => {
           msg: `User added with ID: ${user.user_id}`,
           user,
         });
-      }
+      }  
     );
   } catch (err) {
     return res.status(400).send({ from: 'createUser', err });
@@ -86,12 +86,23 @@ export const logIn = async (req: Request, res: Response) => {
 
         res.cookie('jwt', token, {
           maxAge: 1 * 24 * 60 * 60 * 1000,
-          httpOnly: true,
-        });
+          httpOnly: false,
+          // domain: 'http://localhost:3000/login',
+        }); 
 
         return res.status(200).send({ logged_in: true, user });
       }
     );
+  } catch (err) {
+    return res.status(400).send({ from: 'login', err });
+  }
+};
+
+export const logOut = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie('session.sig');
+
+    return res.status(200).send({ logged_out: true });
   } catch (err) {
     return res.status(400).send({ from: 'login', err });
   }

@@ -1,6 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import accountsRouter from './routes/accounts.route.js';
 import usersRouter from './routes/users.route.js';
 import postsRouter from './routes/posts.route.js';
@@ -9,6 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 dotenv.config({ path: '../env' });
 dotenv.config({ path: ['/env/backend.env', '/env/postgres.env'] });
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
