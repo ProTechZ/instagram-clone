@@ -7,9 +7,10 @@ import accountsRouter from './routes/accounts.route.js';
 import usersRouter from './routes/users.route.js';
 import postsRouter from './routes/posts.route.js';
 import commentsRouter from './routes/comments.route.js';
+import jwt from 'jsonwebtoken';
 
 const app = express();
-const PORT =  process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 dotenv.config({ path: '../env' });
 dotenv.config({ path: ['/env/backend.env', '/env/postgres.env'] });
 
@@ -25,6 +26,17 @@ process.on('uncaughtException', function (err) {
 app.get('/', (req, res) => {
   res.send('Home Screen!');
 });
+app.get('/is-logged-in', (req, res) => {
+  const { jwt: jwtToken } = req.cookies;
+
+  jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
+    if (err) {
+      return res.status(403).send({ logged_in: false });
+    } else {
+      return res.status(403).send({ logged_in: true });
+    }
+  });
+});
 
 app.use('/account', accountsRouter);
 app.use('/users', usersRouter);
@@ -32,5 +44,5 @@ app.use('/posts', postsRouter);
 app.use('/comments', commentsRouter);
 
 app.listen(PORT, () => {
-  console.log(`app listening on port ${PORT}`);
+  console.log(`app listening on port ${PORT}`)
 });

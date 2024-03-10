@@ -2,19 +2,35 @@ import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import pool from '../configs/postgres.config.js';
 
-export const likeComment = async (req: Request, res: Response) => {
+export const createComment = async (req: Request, res: Response) => {
   try {
-    const { jwt: jwtToken } = req.cookies;
+    const user = res.locals.user;
+    const post = res.locals.post;
+    const { comment } = req.body;
 
-    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-      if (err) {
-        return res.status(403).send({
-          logged_in: false,
-          err: 'not allowed to like comment',
+    pool.query(
+      'INSERT INTO comments (user_id, post_id, num_likes, text)' +
+        ' VALUES($1, $2, $3, $4) RETURNING * ',
+      [user.user_id, post.post_id, 0, comment],
+      (err, results) => {
+        if (err) {
+          return res.status(400).send(err);
+        }
+
+        const comment = results.rows[0];
+        return res.status(201).send({
+          created_comment: true,
+          comment,
         });
       }
-    });
+    );
+  } catch (error) {
+    return res.status(400).send({ from: 'createComment', err: error });
+  }
+};
 
+export const likeComment = async (req: Request, res: Response) => {
+  try {
     const comment = res.locals.comment;
     const user = res.locals.user;
 
@@ -46,54 +62,8 @@ export const likeComment = async (req: Request, res: Response) => {
   }
 };
 
-export const createComment = async (req: Request, res: Response) => {
-  try {
-    const { jwt: jwtToken } = req.cookies;
-
-    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-      if (err) {
-        return res.status(403).send({ logged_in: false });
-      }
-    });
-
-    const user = res.locals.user;
-    const post = res.locals.post;
-    const { comment } = req.body;
-
-    pool.query(
-      'INSERT INTO comments (user_id, post_id, num_likes, text)' +
-        ' VALUES($1, $2, $3, $4) RETURNING * ',
-      [user.user_id, post.post_id, 0, comment],
-      (err, results) => {
-        if (err) {
-          return res.status(400).send(err);
-        }
-
-        const comment = results.rows[0];
-        return res.status(201).send({
-          created_comment: true,
-          comment,
-        });
-      }
-    );
-  } catch (error) {
-    return res.status(400).send({ from: 'createComment', err: error });
-  }
-};
-
 export const editComment = async (req: Request, res: Response) => {
   try {
-    const { jwt: jwtToken } = req.cookies;
-
-    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-      if (err) {
-        return res.status(403).send({
-          logged_in: false,
-          err: 'not allowed to update comment',
-        });
-      }
-    });
-
     const comment = res.locals.comment;
     const { comment: newComment } = req.body;
 
@@ -125,16 +95,6 @@ export const editComment = async (req: Request, res: Response) => {
 
 export const deleteComment = async (req: Request, res: Response) => {
   try {
-    const { jwt: jwtToken } = req.cookies;
-
-    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-      if (err) {
-        return res
-          .status(403)
-          .send({ logged_in: false, msg: 'not allowed to delete comment' });
-      }
-    });
-
     const commentId = req.params.commentId;
 
     pool.query(

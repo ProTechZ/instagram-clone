@@ -1,24 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
-import pool from '../configs/postgres.config.js';
+import jwt from 'jsonwebtoken';
 
-const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
-  const commentId = req.params.commentId;
+const isLoggedIn = (notLoggedInMsg?: Object) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    
+    const { jwt: jwtToken } = req.cookies;
 
-  pool.query(
-    'SELECT * FROM comments WHERE comment_id = $1',
-    [commentId],
-    (err, results) => {
+    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
       if (err) {
-        return res.status(400).send(err);
-      } else if (results.rows.length <= 0) {
-        return res.status(400).send('no comment exists here');
-      }
+        return res.status(403).send({
+          logged_in: false,
+          ...notLoggedInMsg,
+        });
+      } 
 
-      const comment = results.rows[0];
-      res.locals.comment = comment;
-      next();
-    }
-  );
+        next();
+      
+    });
+  };
 };
 
 export default isLoggedIn;

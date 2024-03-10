@@ -7,15 +7,36 @@ import {
 } from '../controllers/posts.controller.js';
 import userExists from '../middleware/userExists.js';
 import postExists from '../middleware/postExists.js';
+import isLoggedIn from '../middleware/isLoggedIn.js';
 
 const router = express.Router();
 
-router.post('/new-post/user:userId', userExists, createPost);
+router.post(
+  '/new-post/user:userId',
+  userExists,
+  isLoggedIn({ err: 'not allowed to create post' }),
+  createPost
+);
 
-router.get('/:postId', postExists, getPost);
+router.get(
+  '/:postId',
+  postExists,
+  isLoggedIn({ err: 'not allowed to view post' }),
+  getPost
+);
 
-router.put('/:postId', postExists, updatePost);
+router.put(
+  '/:postId',
+  postExists,
+  isLoggedIn({ err: 'not allowed to update post' }),
+  updatePost
+);
 
-router.delete('/:postId', deletePost);
+router.delete(
+  '/:postId',
+  postExists,
+  isLoggedIn({ err: 'not allowed to delete post' }),
+  deletePost
+);
 
 export default router;

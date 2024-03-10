@@ -23,15 +23,6 @@ export const signUp = async (req: Request, res: Response) => {
       await bcrypt.hash(password, 10),
     ];
 
-    let token = jwt.sign({ id: v4() }, process.env.SECRET_KEY!, {
-      expiresIn: 1 * 24 * 60 * 60 * 1000,
-    });
-
-    res.cookie('jwt', token, {
-      maxAge: 1 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
-
     pool.query(
       'INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING * ',
       data,
@@ -41,12 +32,22 @@ export const signUp = async (req: Request, res: Response) => {
         }
 
         const user = results.rows[0];
+
+        let token = jwt.sign(user.user_id, process.env.SECRET_KEY!, {
+          expiresIn: 1 * 24 * 60 * 60 * 1000,
+        });
+
+        res.cookie('jwt', token, {
+          maxAge: 1 * 24 * 60 * 60 * 1000,
+          httpOnly: true,
+        });
+
         return res.status(201).send({
           logged_in: true,
           msg: `User added with ID: ${user.user_id}`,
           user,
         });
-      }  
+      }
     );
   } catch (err) {
     return res.status(400).send({ from: 'createUser', err });
@@ -80,15 +81,14 @@ export const logIn = async (req: Request, res: Response) => {
           return res.status(401).send('password is incorrect');
         }
 
-        let token = jwt.sign({ user }, process.env.SECRET_KEY!, {
+        let token = jwt.sign(user.user_id, process.env.SECRET_KEY!, {
           expiresIn: 1 * 24 * 60 * 60 * 1000,
         });
 
         res.cookie('jwt', token, {
           maxAge: 1 * 24 * 60 * 60 * 1000,
           httpOnly: false,
-          // domain: 'http://localhost:3000/login',
-        }); 
+        });
 
         return res.status(200).send({ logged_in: true, user });
       }
@@ -100,7 +100,7 @@ export const logIn = async (req: Request, res: Response) => {
 
 export const logOut = async (req: Request, res: Response) => {
   try {
-    res.clearCookie('session.sig');
+    res.clearCookie('jwt');
 
     return res.status(200).send({ logged_out: true });
   } catch (err) {

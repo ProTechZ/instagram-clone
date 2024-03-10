@@ -4,14 +4,6 @@ import pool from '../configs/postgres.config.js';
 
 export const createPost = async (req: Request, res: Response) => {
   try {
-    const { jwt: jwtToken } = req.cookies;
-
-    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-      if (err) {
-        return res.status(403).send({ logged_in: false });
-      }
-    });
-
     const { image, caption } = req.body;
     const user = res.locals.user;
 
@@ -48,17 +40,6 @@ export const getPost = async (req: Request, res: Response) => {
 
 export const updatePost = async (req: Request, res: Response) => {
   try {
-    const { jwt: jwtToken } = req.cookies;
-
-    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-      if (err) {
-        return res.status(403).send({
-          logged_in: false,
-          err: 'not allowed to update post',
-        });
-      }
-    });
-
     const postId = req.params.postId;
     const fieldToUpdate = Object.keys(req.body)[0];
     const updatedValue = Object.values(req.body)[0];
@@ -94,16 +75,6 @@ export const updatePost = async (req: Request, res: Response) => {
 
 export const deletePost = async (req: Request, res: Response) => {
   try {
-    const { jwt: jwtToken } = req.cookies;
-
-    jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-      if (err) {
-        return res
-          .status(403)
-          .send({ logged_in: false, msg: 'not allowed to delete user' });
-      }
-    });
-
     const postId = req.params.postId;
 
     pool.query(

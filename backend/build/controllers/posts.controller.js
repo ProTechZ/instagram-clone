@@ -1,13 +1,6 @@
-import jwt from 'jsonwebtoken';
 import pool from '../configs/postgres.config.js';
 export const createPost = async (req, res) => {
     try {
-        const { jwt: jwtToken } = req.cookies;
-        jwt.verify(jwtToken, process.env.SECRET_KEY, (err, decoded) => {
-            if (err) {
-                return res.status(403).send({ logged_in: false });
-            }
-        });
         const { image, caption } = req.body;
         const user = res.locals.user;
         pool.query('INSERT INTO posts (user_id, image, caption, num_likes, date_posted)' +
@@ -37,15 +30,6 @@ export const getPost = async (req, res) => {
 };
 export const updatePost = async (req, res) => {
     try {
-        const { jwt: jwtToken } = req.cookies;
-        jwt.verify(jwtToken, process.env.SECRET_KEY, (err, decoded) => {
-            if (err) {
-                return res.status(403).send({
-                    logged_in: false,
-                    err: 'not allowed to update post',
-                });
-            }
-        });
         const postId = req.params.postId;
         const fieldToUpdate = Object.keys(req.body)[0];
         const updatedValue = Object.values(req.body)[0];
@@ -74,14 +58,6 @@ export const updatePost = async (req, res) => {
 };
 export const deletePost = async (req, res) => {
     try {
-        const { jwt: jwtToken } = req.cookies;
-        jwt.verify(jwtToken, process.env.SECRET_KEY, (err, decoded) => {
-            if (err) {
-                return res
-                    .status(403)
-                    .send({ logged_in: false, msg: 'not allowed to delete user' });
-            }
-        });
         const postId = req.params.postId;
         pool.query(`DELETE FROM posts WHERE post_id = ${postId}`, (err, results) => {
             if (err) {

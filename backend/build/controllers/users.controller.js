@@ -26,15 +26,6 @@ export const getUser = async (req, res) => {
 };
 export const updateUser = async (req, res) => {
     try {
-        const { jwt: jwtToken } = req.cookies;
-        jwt.verify(jwtToken, process.env.SECRET_KEY, (err, decoded) => {
-            if (err) {
-                return res.status(403).send({
-                    logged_in: false,
-                    err: 'not allowed to update user',
-                });
-            }
-        });
         const userId = req.params.userId;
         const fieldToUpdate = Object.keys(req.body)[0];
         const updatedValue = Object.values(req.body)[0];
@@ -66,14 +57,6 @@ export const updateUser = async (req, res) => {
 };
 export const deleteUser = async (req, res) => {
     try {
-        const { jwt: jwtToken } = req.cookies;
-        jwt.verify(jwtToken, process.env.SECRET_KEY, (err, decoded) => {
-            if (err) {
-                return res
-                    .status(403)
-                    .send({ logged_in: false, msg: 'not allowed to delete user' });
-            }
-        });
         const userId = req.params.userId;
         pool.query(`DELETE FROM users WHERE user_id = ${userId}`, (err, results) => {
             if (err) {
