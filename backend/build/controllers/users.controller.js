@@ -9,8 +9,8 @@ export const getUser = async (req, res) => {
             }
             const posts = results.rows[0] ? results.rows[0] : [];
             const user = res.locals.user;
-            const { jwt: jwtToken } = req.cookies;
-            jwt.verify(jwtToken, process.env.SECRET_KEY, (err, decoded) => {
+            const { jwt: token } = req.cookies;
+            jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
                 if (err) {
                     return res.status(403).send({ is_user: false, user, posts });
                 }

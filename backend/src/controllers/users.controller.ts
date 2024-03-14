@@ -17,19 +17,15 @@ export const getUser = async (req: Request, res: Response) => {
         const posts = results.rows[0] ? results.rows[0] : [];
         const user = res.locals.user;
 
-        const { jwt: jwtToken } = req.cookies;
+        const { jwt: token } = req.cookies;
 
-        jwt.verify(
-          jwtToken,
-          process.env.SECRET_KEY!,
-          (err: any, decoded: any) => {
-            if (err) {
-              return res.status(403).send({ is_user: false, user, posts });
-            } else {
-              return res.status(200).send({ is_user: true, posts, ...decoded });
-            }
+        jwt.verify(token, process.env.SECRET_KEY!, (err: any, decoded: any) => {
+          if (err) {
+            return res.status(403).send({ is_user: false, user, posts });
+          } else {
+            return res.status(200).send({ is_user: true, posts, ...decoded });
           }
-        );
+        });
       }
     );
   } catch (err) {

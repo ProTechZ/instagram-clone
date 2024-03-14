@@ -27,9 +27,9 @@ app.get('/', (req, res) => {
   res.send('Home Screen!');
 });
 app.get('/is-logged-in', (req, res) => {
-  const { jwt: jwtToken } = req.cookies;
+  const { jwt: token } = req.cookies;
 
-  jwt.verify(jwtToken, process.env.SECRET_KEY!, (err: any, decoded: any) => {
+  jwt.verify(token, process.env.SECRET_KEY!, (err: any, decoded: any) => {
     if (err) {
       return res.status(403).send({ logged_in: false });
     } else {
@@ -44,5 +44,5 @@ app.use('/posts', postsRouter);
 app.use('/comments', commentsRouter);
 
 app.listen(PORT, () => {
-  console.log(`app listening on port ${PORT}`)
+  console.log(`app listening on port ${PORT}`);
 });

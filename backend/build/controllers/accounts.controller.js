@@ -21,7 +21,7 @@ export const signUp = async (req, res) => {
                 return res.status(400).send(err);
             }
             const user = results.rows[0];
-            let token = jwt.sign(user.user_id, process.env.SECRET_KEY, {
+            let token = jwt.sign(user, process.env.SECRET_KEY, {
                 expiresIn: 1 * 24 * 60 * 60 * 1000,
             });
             res.cookie('jwt', token, {
@@ -59,12 +59,11 @@ export const logIn = async (req, res) => {
             if (!passwordCorrect) {
                 return res.status(401).send('password is incorrect');
             }
-            let token = jwt.sign(user.user_id, process.env.SECRET_KEY, {
+            let token = jwt.sign(user, process.env.SECRET_KEY, {
                 expiresIn: 1 * 24 * 60 * 60 * 1000,
             });
             res.cookie('jwt', token, {
                 maxAge: 1 * 24 * 60 * 60 * 1000,
-                httpOnly: false,
             });
             return res.status(200).send({ logged_in: true, user });
         });
