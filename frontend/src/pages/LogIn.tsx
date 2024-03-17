@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import Navbar from '../components/Navbar';
+import Background from '../assets/Background.svg';
 
 const LogIn = () => {
   const [usernameOrEmail, setUsername] = useState('');
@@ -22,40 +22,48 @@ const LogIn = () => {
       console.error(err.response.data);
     }
   };
-  const c = () => {
-    console.log(document.cookie);
-  };
 
   return (
-    <div>
-      <Navbar />
-      <h1>Sign Up</h1>
+    <div
+      style={{ backgroundImage: `url(${Background})` }}
+      className="flex items-center justify-center h-screen"
+    >
+      <div className="flex justify-center items-center p-10 rounded-3xl mb-24 w-1/3 h-1/2 border-2 border-red-400">
+        <h1
+          style={{
+            WebkitTextStroke: '1px #F87171',
+          }}
+          className="tracking-widest stroke-blue-400 font-bold h-1/3 w-1/2 transform -rotate-90 text-white text-5xl "
+        >
+          INSTAHUB
+        </h1>
 
-      <button onClick={c}>cookie</button>
-
-      <form>
-        <label>
-          Username/Email
+        <form className="flex flex-col w-1/2 ">
           <input
             type="text"
+            placeholder="Username/Email"
             value={usernameOrEmail}
             onChange={(e) => setUsername(e.target.value)}
+            className="py-5 px-2 rounded-md border mb-1 h-8 border-red-400"
           />
-        </label>
 
-        <label>
-          Password
           <input
             type="text"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="py-5 px-2 rounded-md border  h-8 border-red-400"
           />
-        </label>
 
-        <button type="button" onClick={submit}>
-          Log In
-        </button>
-      </form>
+          <button
+            className="font-bold rounded-full bg-white border-2 border-red-400 mt-6 py-3 px-20 "
+            type="button"
+            onClick={submit}
+          >
+            LOG IN
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

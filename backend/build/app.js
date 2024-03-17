@@ -6,7 +6,6 @@ import accountsRouter from './routes/accounts.route.js';
 import usersRouter from './routes/users.route.js';
 import postsRouter from './routes/posts.route.js';
 import commentsRouter from './routes/comments.route.js';
-import jwt from 'jsonwebtoken';
 const app = express();
 const PORT = process.env.PORT || 3000;
 dotenv.config({ path: '../env' });
@@ -21,16 +20,13 @@ process.on('uncaughtException', function (err) {
 app.get('/', (req, res) => {
     res.send('Home Screen!');
 });
-app.get('/is-logged-in', (req, res) => {
-    const { jwt: token } = req.cookies;
-    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-        if (err) {
-            return res.status(403).send({ logged_in: false });
-        }
-        else {
-            return res.status(403).send({ logged_in: true });
-        }
-    });
+app.get('/isloggedin', (req, res) => {
+    if (req.cookies.jwt) {
+        return res.send({ logged_in: true });
+    }
+    else {
+        return res.send({ logged_in: false });
+    }
 });
 app.use('/account', accountsRouter);
 app.use('/users', usersRouter);

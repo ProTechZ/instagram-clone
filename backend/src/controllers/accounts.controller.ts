@@ -80,8 +80,8 @@ export const logIn = async (req: Request, res: Response) => {
         if (!passwordCorrect) {
           return res.status(401).send('password is incorrect');
         }
-        
-        let token = jwt.sign( user, process.env.SECRET_KEY!, {
+
+        let token = jwt.sign(user, process.env.SECRET_KEY!, {
           expiresIn: 1 * 24 * 60 * 60 * 1000,
         });
 
@@ -103,6 +103,6 @@ export const logOut = async (req: Request, res: Response) => {
 
     return res.status(200).send({ logged_out: true });
   } catch (err) {
-    return res.status(400).send({ from: 'login', err });
+    return res.status(400).send({ from: 'logout', err });
   }
 };

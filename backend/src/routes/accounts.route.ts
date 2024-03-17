@@ -22,6 +22,7 @@ const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
 
 router.post('/signup', signUp);
 router.post('/login', logIn);
-router.post('/logout', isLoggedIn, logOut);
+router.post('/logout', logOut);
+router.post('/logout', logOut);
 
 export default router;

@@ -78,6 +78,6 @@ export const logOut = async (req, res) => {
         return res.status(200).send({ logged_out: true });
     }
     catch (err) {
-        return res.status(400).send({ from: 'login', err });
+        return res.status(400).send({ from: 'logout', err });
     }
 };

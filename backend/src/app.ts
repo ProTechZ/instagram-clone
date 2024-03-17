@@ -26,16 +26,12 @@ process.on('uncaughtException', function (err) {
 app.get('/', (req, res) => {
   res.send('Home Screen!');
 });
-app.get('/is-logged-in', (req, res) => {
-  const { jwt: token } = req.cookies;
-
-  jwt.verify(token, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-    if (err) {
-      return res.status(403).send({ logged_in: false });
-    } else {
-      return res.status(403).send({ logged_in: true });
-    }
-  });
+app.get('/isloggedin', (req, res) => {
+  if (req.cookies.jwt) {
+    return res.send({ logged_in: true });
+  } else {
+    return res.send({ logged_in: false });
+  }
 });
 
 app.use('/account', accountsRouter);
