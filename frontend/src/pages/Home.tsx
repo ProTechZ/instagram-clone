@@ -1,9 +1,14 @@
 import Navbar from '../components/Navbar';
 
+// const users = () => {
+
+// }
+
+
 const Home = () => {
 
   return (
-    <div>
+    <div className="flex">
       <Navbar />
 
       <h2>Home View</h2>

@@ -33,7 +33,7 @@ const LogIn = () => {
           style={{
             WebkitTextStroke: '1px #F87171',
           }}
-          className="tracking-widest stroke-blue-400 font-bold h-1/3 w-1/2 transform -rotate-90 text-white text-5xl "
+          className="tracking-widest font-bold h-1/3 w-1/2 transform -rotate-90 text-white text-5xl "
         >
           INSTAHUB
         </h1>
