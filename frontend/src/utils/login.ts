@@ -7,9 +7,11 @@ const login = (
   goToHome: any
 ) => {
   const usernameEmailInput = document.getElementById(
-    'usernameEmail'
+    'usernameEmailInput'
   ) as HTMLInputElement;
-  const passwordInput = document.getElementById('password') as HTMLInputElement;
+  const passwordInput = <HTMLInputElement>(
+    document.getElementById('passwordInput')
+  );
 
   if (!usernameEmail) {
     usernameEmailInput.style.borderColor = 'red';
@@ -34,8 +36,7 @@ const login = (
         password,
       })
       .then((results) => {
-        console.log(results);
-        const { loggedIn, err, user } = results.data;
+        const { loggedIn, err } = results.data;
 
         if (!loggedIn) {
           setError(err);

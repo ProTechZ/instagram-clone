@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { v4 } from 'uuid';
 import pool from '../configs/postgres.config.js';
 import bcrypt from 'bcrypt';
 

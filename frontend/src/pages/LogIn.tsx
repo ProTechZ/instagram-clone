@@ -26,7 +26,7 @@ const LogIn = () => {
 
         <form className="flex flex-col w-3/4">
           <input
-            id="usernameEmail"
+            id="usernameEmailInput"
             type="text"
             placeholder="Username/Email"
             value={usernameEmail}
@@ -35,7 +35,7 @@ const LogIn = () => {
           />
 
           <input
-            id="password"
+            id="passwordInput"
             type="text"
             placeholder="Password"
             value={password}
