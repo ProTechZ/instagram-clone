@@ -28,7 +28,7 @@ export const signUp = async (req: Request, res: Response) => {
       data,
       (err, results) => {
         if (err) {
-          return res.status(400).send(err);
+          return res.send({ err, loggedIn: false });
         }
 
         const user = results.rows[0];
@@ -43,14 +43,14 @@ export const signUp = async (req: Request, res: Response) => {
         });
 
         return res.status(201).send({
-          logged_in: true,
+          loggedIn: true,
           msg: `User added with ID: ${user.user_id}`,
           user,
         });
       }
     );
   } catch (err) {
-    return res.status(400).send({ from: 'createUser', err });
+    return res.status(400).send({ loggedIn: false, from: 'signUp', err });
   }
 };
 
@@ -69,16 +69,19 @@ export const logIn = async (req: Request, res: Response) => {
       [usernameEmail],
       async (err, results) => {
         if (err) {
-          return res.status(400).send(err);
+          return res.send({ loggedIn: false, err });
         } else if (results.rows.length <= 0) {
-          return res.status(400).send('no user with that username or email');
+          return res.send({
+            loggedIn: false,
+            err: 'No user with that username or email exists',
+          });
         }
 
         const user = results.rows[0];
         const passwordCorrect = await bcrypt.compare(password, user.password);
 
         if (!passwordCorrect) {
-          return res.status(401).send('password is incorrect');
+          return res.send({ loggedIn: false, err: 'Password is incorrect' });
         }
 
         let token = jwt.sign(user, process.env.SECRET_KEY!, {
@@ -89,7 +92,7 @@ export const logIn = async (req: Request, res: Response) => {
           maxAge: 1 * 24 * 60 * 60 * 1000,
         });
 
-        return res.status(200).send({ logged_in: true, user });
+        return res.status(200).send({ loggedIn: true, user });
       }
     );
   } catch (err) {

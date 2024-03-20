@@ -1,67 +1,63 @@
-import axios from 'axios';
-import { useState } from 'react';
 import Background from '../assets/Background.svg';
+import { Link, useNavigate } from 'react-router-dom';
+import login from '../utils/login';
+import { useState } from 'react';
+
 
 const LogIn = () => {
-  const [usernameOrEmail, setUsername] = useState('');
+  const [usernameEmail, setUsernameEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const submit = async () => {
-    if (!usernameOrEmail || !password) {
-      alert('invalid values');
-    }
-
-    try {
-      const results = await axios.post('http://localhost/account/login', {
-        usernameEmail: usernameOrEmail,
-        password,
-      });
-
-      console.log(results);
-    } catch (err: any) {
-      console.error(err.response.data);
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <div
       style={{ backgroundImage: `url(${Background})` }}
       className="flex items-center justify-center h-screen"
     >
-      <div className="flex justify-center items-center p-10 rounded-3xl mb-24 w-1/3 h-1/2 border-2 border-red-400">
+      <div className="flex flex-col justify-evenly items-center bg-white rounded-3xl mb-24 w-1/4 h-1/2 border-2 border-purple-300">
         <h1
-          style={{
-            WebkitTextStroke: '1px #F87171',
-          }}
-          className="tracking-widest font-bold h-1/3 w-1/2 transform -rotate-90 text-white text-5xl "
+          style={{ WebkitTextStroke: '1px #b570fb' }}
+          className="tracking-widest font-bold  text-white text-5xl "
         >
           INSTAHUB
         </h1>
 
-        <form className="flex flex-col w-1/2 ">
+        <form className="flex flex-col w-3/4">
           <input
+            id="usernameEmail"
             type="text"
             placeholder="Username/Email"
-            value={usernameOrEmail}
-            onChange={(e) => setUsername(e.target.value)}
-            className="py-5 px-2 rounded-md border mb-1 h-8 border-red-400"
+            value={usernameEmail}
+            onChange={(e) => setUsernameEmail(e.target.value)}
+            className="py-5 px-2 rounded-md border mb-1 h-8 border-purple-300"
           />
 
           <input
+            id="password"
             type="text"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="py-5 px-2 rounded-md border  h-8 border-red-400"
+            className="py-5 px-2 rounded-md border h-8 border-purple-300"
           />
 
+          {error && <p className="text-red-600 text-sm italic mt-1">{error}</p>}
+
           <button
-            className="font-bold rounded-full bg-white border-2 border-red-400 mt-6 py-3 px-20 "
+            className="font-bold rounded-full bg-white border-2 border-purple-300 mt-8 mb-2 py-3 px-20 "
             type="button"
-            onClick={submit}
+            onClick={() => login(usernameEmail, password, setError, () => navigate('/'))}
           >
             LOG IN
           </button>
+
+          <Link to="/signup">
+            <p className="text-center text-blue-600 text-sm hover:underline ">
+              Don't have an account?
+            </p>
+          </Link>
         </form>
       </div>
     </div>

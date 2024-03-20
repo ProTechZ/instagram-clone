@@ -28,9 +28,9 @@ app.get('/', (req, res) => {
 });
 app.get('/isloggedin', (req, res) => {
   if (req.cookies.jwt) {
-    return res.send({ logged_in: true });
+    return res.send({ loggedIn: true });
   } else {
-    return res.send({ logged_in: false });
+    return res.send({ loggedIn: false });
   }
 });
 

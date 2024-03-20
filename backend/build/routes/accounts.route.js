@@ -7,7 +7,7 @@ const isLoggedIn = (req, res, next) => {
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
         if (err) {
             return res.status(403).send({
-                logged_in: false,
+                loggedIn: false,
                 err: 'not even logged in',
             });
         }
