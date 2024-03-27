@@ -5,28 +5,33 @@ import {
   deleteUser,
 } from '../controllers/users.controller.js';
 import userExists from '../middleware/userExists.js';
-import isAllowed from '../middleware/isAllowed.js';
+import isMatchingUser from '../middleware/isMatchingUser.js';
+import isLoggedIn from '../middleware/isLoggedIn.js';
 
 const router = express.Router();
 
 router.get(
   '/:userId',
-  userExists,
-  isAllowed({ err: 'not allowed to view user' }),
+  userExists, 
   getUser
 );
 
 router.put(
   '/:userId',
   userExists,
-  isAllowed({ err: 'not allowed to update user' }),
+
+  isLoggedIn,
+  isMatchingUser({ err: 'not allowed to update user' }),
+
   updateUser
 );
 
 router.delete(
   '/:userId',
   userExists,
-  isAllowed({ err: 'not allowed to delete user' }),
+
+  isLoggedIn,
+  isMatchingUser({ err: 'not allowed to delete user' }),
 
   deleteUser
 );

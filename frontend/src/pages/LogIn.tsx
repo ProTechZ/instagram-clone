@@ -2,7 +2,7 @@ import Background from '../assets/Background.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import login from '../utils/login';
 import { useState } from 'react';
-
+import useUserIdStore from '../store';
 
 const LogIn = () => {
   const [usernameEmail, setUsernameEmail] = useState('');
@@ -10,6 +10,7 @@ const LogIn = () => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  const { setUserId } = useUserIdStore();
 
   return (
     <div
@@ -48,7 +49,9 @@ const LogIn = () => {
           <button
             className="font-bold rounded-full bg-white border-2 border-purple-300 mt-8 mb-2 py-3 px-20 "
             type="button"
-            onClick={() => login(usernameEmail, password, setError, () => navigate('/'))}
+            onClick={() =>
+              login(usernameEmail, password, setError, () => navigate('/'), setUserId)
+            }
           >
             LOG IN
           </button>

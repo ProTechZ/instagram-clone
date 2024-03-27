@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { signUp, logIn, logOut } from '../controllers/accounts.controller.js';
-import isAllowed from '../middleware/isAllowed.js';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();

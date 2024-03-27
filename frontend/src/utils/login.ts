@@ -4,7 +4,8 @@ const login = (
   usernameEmail: string,
   password: string,
   setError: any,
-  goToHome: any
+  goToHome: any,
+  setUserId: any
 ) => {
   const usernameEmailInput = document.getElementById(
     'usernameEmailInput'
@@ -36,12 +37,13 @@ const login = (
         password,
       })
       .then((results) => {
-        const { loggedIn, err } = results.data;
+        const { loggedIn, err, user } = results.data;
 
         if (!loggedIn) {
           setError(err);
         } else {
           setError('');
+          setUserId(user.user_id)
           goToHome();
         }
       })

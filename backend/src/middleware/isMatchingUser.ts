@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-type User = {
+export type User = {
   user_id: number;
   first_name: string;
   last_name: string;
@@ -12,14 +12,8 @@ type User = {
   password: string;
 };
 
-const isAllowed = (deniedMsg?: Object) => {
+const isMatchingUser = (deniedMsg?: Object) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.cookies.jwt) {
-      return res.status(403).send({
-        err: 'not logged in',
-      });
-    }
-
     const { jwt: token } = req.cookies;
     let currUserId = null;
 
@@ -33,12 +27,12 @@ const isAllowed = (deniedMsg?: Object) => {
     const loggedInUserId = (jwt.decode(token) as User).user_id;
 
     if (loggedInUserId != currUserId) {
-      return res.status(403).send({ err: 'not the correct user' });
+      return res.send({ err: 'not the correct user' });
     }
 
     jwt.verify(token, process.env.SECRET_KEY!, (err: any, decoded: any) => {
       if (err) {
-        return res.status(403).send({
+        return res.send({
           ...deniedMsg,
         });
       }
@@ -48,4 +42,4 @@ const isAllowed = (deniedMsg?: Object) => {
   };
 };
 
-export default isAllowed;
+export default isMatchingUser;

@@ -7,6 +7,7 @@ import accountsRouter from './routes/accounts.route.js';
 import usersRouter from './routes/users.route.js';
 import postsRouter from './routes/posts.route.js';
 import commentsRouter from './routes/comments.route.js';
+import friendsRouter from './routes/friends.route.js';
 import jwt from 'jsonwebtoken';
 
 const app = express();
@@ -38,6 +39,7 @@ app.use('/account', accountsRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/comments', commentsRouter);
+app.use('/friends', friendsRouter);
 
 app.listen(PORT, () => {
   console.log(`app listening on port ${PORT}`);

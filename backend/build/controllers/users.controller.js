@@ -1,30 +1,27 @@
-import jwt from 'jsonwebtoken';
 import pool from '../configs/postgres.config.js';
-export const getUser = async (req, res) => {
+export const getUser = (req, res) => {
     try {
         const userId = req.params.userId;
-        pool.query('SELECT * FROM posts WHERE user_id = $1', [userId], (err, results) => {
-            if (err) {
-                return res.status(400).send({ err });
+        let user;
+        pool.query(`SELECT * FROM users WHERE user_id = ${userId}`, (err, results) => {
+            if (err || results.rows.length <= 0) {
+                return res.send({ err: 'user doesnt exist' });
             }
-            const posts = results.rows[0] ? results.rows[0] : [];
-            const user = res.locals.user;
-            const { jwt: token } = req.cookies;
-            jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-                if (err) {
-                    return res.status(403).send({ is_user: false, user, posts });
-                }
-                else {
-                    return res.status(200).send({ is_user: true, posts, ...decoded });
-                }
-            });
+            user = results.rows[0];
+        });
+        pool.query(`SELECT * FROM posts WHERE user_id = ${userId}`, (err, results) => {
+            if (err) {
+                return res.send({ err });
+            }
+            const posts = results.rows;
+            return res.status(200).send({ posts, user });
         });
     }
     catch (err) {
         return res.status(400).send({ from: 'getUser', err });
     }
 };
-export const updateUser = async (req, res) => {
+export const updateUser = (req, res) => {
     try {
         const userId = req.params.userId;
         const fieldToUpdate = Object.keys(req.body)[0];
@@ -55,7 +52,7 @@ export const updateUser = async (req, res) => {
         return res.status(400).send({ from: 'updateUser', err });
     }
 };
-export const deleteUser = async (req, res) => {
+export const deleteUser = (req, res) => {
     try {
         const userId = req.params.userId;
         pool.query(`DELETE FROM users WHERE user_id = ${userId}`, (err, results) => {

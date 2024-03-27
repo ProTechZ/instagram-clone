@@ -6,7 +6,7 @@ const userExists = (req, res, next) => {
             return res.status(400).send(err);
         }
         else if (results.rows.length <= 0) {
-            return res.status(400).send('no user exists here');
+            return res.status(400).send(`user ${userId} does no exist`);
         }
         const user = results.rows[0];
         res.locals.user = user;

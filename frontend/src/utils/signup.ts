@@ -12,6 +12,7 @@ const signUp = (
   setError: any,
   setShowModal: any,
   goToHome: any,
+  setUserId: any,
 ) => {
   const ref = [
     { val: firstName, input: document.getElementsByTagName('input')[0] },
@@ -74,12 +75,14 @@ const signUp = (
         password,
       })
       .then((results) => {
-        const { loggedIn, err } = results.data;
+        const { loggedIn, err, user } = results.data;
 
         if (!loggedIn) {
           setError(err);
         } else {
           setError('');
+          setUserId(user.user_id);
+
           goToHome();
         }
       })

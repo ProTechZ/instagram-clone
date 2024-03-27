@@ -1,31 +1,34 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import pool from '../configs/postgres.config.js';
+import { User } from '../middleware/isMatchingUser.js';
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUser = (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
+    let user: User;
 
     pool.query(
-      'SELECT * FROM posts WHERE user_id = $1',
-      [userId],
+      `SELECT * FROM users WHERE user_id = ${userId}`,
       (err, results) => {
-        if (err) {
-          return res.status(400).send({ err });
+        if (err || results.rows.length <= 0) {
+          return res.send({ err: 'user doesnt exist' });
         }
 
-        const posts = results.rows[0] ? results.rows[0] : [];
-        const user = res.locals.user;
+        user = results.rows[0];
+      }
+    );
 
-        const { jwt: token } = req.cookies;
+    pool.query(
+      `SELECT * FROM posts WHERE user_id = ${userId}`,
+      (err, results) => {
+        if (err) {
+          return res.send({ err });
+        }
 
-        jwt.verify(token, process.env.SECRET_KEY!, (err: any, decoded: any) => {
-          if (err) {
-            return res.status(403).send({ is_user: false, user, posts });
-          } else {
-            return res.status(200).send({ is_user: true, posts, ...decoded });
-          }
-        });
+        const posts = results.rows;
+
+        return res.status(200).send({ posts, user });
       }
     );
   } catch (err) {
@@ -33,7 +36,7 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const fieldToUpdate = Object.keys(req.body)[0];
@@ -71,7 +74,7 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
 

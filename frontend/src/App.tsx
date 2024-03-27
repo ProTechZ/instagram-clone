@@ -3,7 +3,7 @@ import Home from './pages/Home';
 import SignUp from './pages/SignUp';
 import LogIn from './pages/LogIn';
 import NoPageHere from './pages/NoPageHere';
-import Profile from './pages/Profile';
+import UserProfile from './pages/UserProfile';
 
 const App = () => {
   return (
@@ -12,7 +12,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/user/:userId" element={<UserProfile />} />
         <Route path="*" element={<NoPageHere />} />
       </Routes>
     </Router>
