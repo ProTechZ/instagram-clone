@@ -1,42 +1,33 @@
-import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import pool from '../configs/postgres.config.js';
-import { User } from '../middleware/isMatchingUser.js';
 
-export const getUser = (req: Request, res: Response) => {
+export const getUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-    let user: User;
 
-    pool.query(
-      `SELECT * FROM users WHERE user_id = ${userId}`,
-      (err, results) => {
-        if (err || results.rows.length <= 0) {
-          return res.send({ err: 'user doesnt exist' });
-        }
-
-        user = results.rows[0];
-      }
+    const userQueryResults = await pool.query(
+      `SELECT * FROM users WHERE user_id = ${userId}`
     );
 
-    pool.query(
-      `SELECT * FROM posts WHERE user_id = ${userId}`,
-      (err, results) => {
-        if (err) {
-          return res.send({ err });
-        }
+    if (userQueryResults.rows.length <= 0) {
+      return res.send({ successful: false, err: 'User doesnt exist' });
+    }
 
-        const posts = results.rows;
+    const user = userQueryResults.rows[0];
 
-        return res.status(200).send({ posts, user });
-      }
+    const postQueryResults = await pool.query(
+      `SELECT * FROM posts WHERE user_id = ${userId}`
     );
+
+    const posts = postQueryResults.rows;
+
+    return res.status(200).send({ successful: true, posts, user });
   } catch (err) {
-    return res.status(400).send({ from: 'getUser', err });
+    return res.status(400).send({ from: 'getUser', successful: false, err });
   }
 };
 
-export const updateUser = (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const fieldToUpdate = Object.keys(req.body)[0];
@@ -52,45 +43,36 @@ export const updateUser = (req: Request, res: Response) => {
     ) {
       return res
         .status(400)
-        .send({ updated: false, err: 'invalid field to update' });
+        .send({ successful: false, err: 'invalid field to update' });
     } else if (!updatedValue) {
-      return res.status(400).send({ updated: false, err: 'no update value' });
+      return res
+        .status(400)
+        .send({ successful: false, err: 'no update value' });
     }
 
-    pool.query(
-      `UPDATE users SET ${fieldToUpdate} = '${updatedValue}' WHERE user_id = ${userId}`,
-      (err, results) => {
-        if (err) {
-          return res.status(400).send({ updated: false, err });
-        }
-
-        return res
-          .status(200)
-          .send({ updated: true, updatedUser: results.rows[0] });
-      }
+    const results = await pool.query(
+      `UPDATE users SET ${fieldToUpdate} = '${updatedValue}' WHERE user_id = ${userId}`
     );
+
+    return res
+      .status(200)
+      .send({ successful: true, updatedUser: results.rows[0] });
   } catch (err) {
-    return res.status(400).send({ from: 'updateUser', err });
+    return res.status(400).send({ from: 'updateUser', successful: false, err });
   }
 };
 
-export const deleteUser = (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-
-    pool.query(
-      `DELETE FROM users WHERE user_id = ${userId}`,
-      (err, results) => {
-        if (err) {
-          return res.status(400).send({ deleted: false, err });
-        }
-
-        return res
-          .status(200)
-          .send({ deleted: true, deletedUser: results.rows[0] });
-      }
+    const results = await pool.query(
+      `DELETE FROM users WHERE user_id = ${userId}`
     );
+
+    return res
+      .status(200)
+      .send({ successful: true, deletedUser: results.rows[0] });
   } catch (err) {
-    return res.status(400).send({ from: 'deleteUser', err });
+    return res.status(400).send({ from: 'deleteUser', successful: false, err });
   }
 };

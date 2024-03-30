@@ -7,36 +7,24 @@ export const signUp = async (req, res) => {
         const avatar = req.body.avatar
             ? req.body.avatar
             : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-media-1677509740';
-        const data = [
-            first_name,
-            last_name,
-            username,
-            email,
-            avatar,
-            birthday,
-            await bcrypt.hash(password, 10),
-        ];
-        pool.query('INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING * ', data, (err, results) => {
-            if (err) {
-                return res.send({ err, loggedIn: false });
-            }
-            const user = results.rows[0];
-            let token = jwt.sign(user, process.env.SECRET_KEY, {
-                expiresIn: 1 * 24 * 60 * 60 * 1000,
-            });
-            res.cookie('jwt', token, {
-                maxAge: 1 * 24 * 60 * 60 * 1000,
-                httpOnly: true,
-            });
-            return res.status(201).send({
-                loggedIn: true,
-                msg: `User added with ID: ${user.user_id}`,
-                user,
-            });
+        const encryptedPsswrd = await bcrypt.hash(password, 10);
+        const results = await pool.query(`INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES(${first_name}, ${last_name}, ${username}, ${email}, ${avatar}, ${birthday}, $${encryptedPsswrd}) RETURNING *`);
+        const user = results.rows[0];
+        let token = jwt.sign(user, process.env.SECRET_KEY, {
+            expiresIn: 1 * 24 * 60 * 60 * 1000,
+        });
+        res.cookie('jwt', token, {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+        });
+        return res.status(201).send({
+            successful: true,
+            msg: `User added with ID: ${user.user_id}`,
+            user,
         });
     }
     catch (err) {
-        return res.status(400).send({ loggedIn: false, from: 'signUp', err });
+        return res.status(400).send({ successful: false, from: 'signUp', err });
     }
 };
 export const logIn = async (req, res) => {
@@ -47,7 +35,6 @@ export const logIn = async (req, res) => {
         if (usernameEmail.includes('@')) {
             query = 'email';
         }
-        console.log(`SELECT * FROM users WHERE ${query} = ${usernameEmail}`);
         const results = await pool.query(`SELECT * FROM users WHERE ${query} = '${usernameEmail}'`);
         if (results.rows.length <= 0) {
             return res.send({
@@ -58,30 +45,28 @@ export const logIn = async (req, res) => {
         const user = results.rows[0];
         const passwordCorrect = await bcrypt.compare(password, user.password);
         if (!passwordCorrect) {
-            return res.send({ loggedIn: false, err: 'Password is incorrect' });
+            return res.send({ successful: false, err: 'Password is incorrect' });
         }
         let token = jwt.sign(user, process.env.SECRET_KEY);
         res.cookie('jwt', token, {
             secure: false,
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: false,
-            sameSite: 'lax'
+            sameSite: 'lax',
         });
-        console.log(res.getHeaders());
-        console.log({ user, loggedIn: true });
-        return res.status(200).send({ user, loggedIn: true });
+        return res.status(200).send({ user, successful: true });
     }
     catch (err) {
         console.error(err);
-        return res.status(400).send({ from: 'login', loggedIn: false, err });
+        return res.status(400).send({ from: 'login', successful: false, err });
     }
 };
 export const logOut = async (req, res) => {
     try {
-        // res.clearCookie('jwt');
-        return res.status(200).send({ logged_out: true });
+        res.clearCookie('jwt');
+        return res.status(200).send({ successful: true, logged_out: true });
     }
     catch (err) {
-        return res.status(400).send({ from: 'logout', err });
+        return res.status(400).send({ from: 'logout', successful: false, err });
     }
 };

@@ -20,13 +20,12 @@ app.use(
   cors({
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Set-Cookie', ],
+    allowedHeaders: ['Content-Type', 'Set-Cookie'],
     origin: ['http://localhost:3000'],
   })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 app.get('/', (req, res) => {
   res.send('Home Screen!');
@@ -46,5 +45,5 @@ app.use('/comments', commentsRouter);
 app.use('/friends', friendsRouter);
 
 app.listen(PORT, () => {
-  console.log(`app listening on port ${PORT}`);
+  console.log(`App is listening on port ${PORT}`);
 });
