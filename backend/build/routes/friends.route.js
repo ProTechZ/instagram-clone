@@ -5,7 +5,7 @@ import isMatchingUser from '../middleware/isMatchingUser.js';
 import isLoggedIn from '../middleware/isLoggedIn.js';
 import pool from '../configs/postgres.config.js';
 const router = express.Router();
-router.get('/follow/:userId/:userToFollow', userExists, (req, res, next) => {
+router.get('/follow/:userId/:userToFollow', isLoggedIn, userExists, (req, res, next) => {
     const userToFollowId = req.params.userToFollow;
     pool.query(`SELECT * FROM users WHERE user_id = ${userToFollowId}`, (err, results) => {
         if (err) {
@@ -16,8 +16,8 @@ router.get('/follow/:userId/:userToFollow', userExists, (req, res, next) => {
         }
         next();
     });
-}, isLoggedIn, isMatchingUser({ err: 'not allowed to follow user' }), followUser);
-router.get('/unfollow/:userId/:followedUser', userExists, (req, res, next) => {
+}, isMatchingUser({ err: 'not allowed to follow user' }), followUser);
+router.get('/unfollow/:userId/:followedUser', isLoggedIn, userExists, (req, res, next) => {
     const followedUser = req.params.followedUser;
     pool.query(`SELECT * FROM users WHERE user_id = ${followedUser}`, (err, results) => {
         if (err) {
@@ -28,7 +28,7 @@ router.get('/unfollow/:userId/:followedUser', userExists, (req, res, next) => {
         }
         next();
     });
-}, isLoggedIn, isMatchingUser({ err: 'not allowed to unfollow user' }), unFollowUser);
-router.get('/get-followed/:userId', userExists, isLoggedIn, getAllFollowed);
-router.get('/get-followers/:userId', userExists, isLoggedIn, getAllFollowers);
+}, isMatchingUser({ err: 'not allowed to unfollow user' }), unFollowUser);
+router.get('/get-followed/:userId', isLoggedIn, userExists, getAllFollowed);
+router.get('/get-followers/:userId', isLoggedIn, userExists, getAllFollowers);
 export default router;

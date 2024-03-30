@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import pool from '../configs/postgres.config.js';
-import bcrypt from 'bcrypt';
 
 export const followUser = async (req: Request, res: Response) => {
   try {
@@ -83,8 +81,7 @@ export const getAllFollowed = async (req: Request, res: Response) => {
     const userId = req.params.userId;
 
     pool.query(
-      `SELECT * FROM followed_following WHERE user_following_id = $1`,
-      [userId],
+      `SELECT * FROM followed_following WHERE user_following_id = $${userId}`,
       (err, results) => {
         if (err) {
           return res.send({ err });

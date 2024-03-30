@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
-const isLoggedIn = (req, res, next) => {
+const isLoggedIn = async (req, res, next) => {
     const { jwt: token } = req.cookies;
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+        console.log(token);
         if (err) {
             return res.status(403).send({
                 loggedIn: false,

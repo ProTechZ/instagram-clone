@@ -14,6 +14,7 @@ const router = express.Router();
 
 router.get(
   '/follow/:userId/:userToFollow',
+  isLoggedIn,
   userExists,
 
   (req: Request, res: Response, next: NextFunction) => {
@@ -33,7 +34,6 @@ router.get(
     );
   },
 
-  isLoggedIn,
   isMatchingUser({ err: 'not allowed to follow user' }),
 
   followUser
@@ -41,6 +41,8 @@ router.get(
 
 router.get(
   '/unfollow/:userId/:followedUser',
+  isLoggedIn,
+
   userExists,
   (req: Request, res: Response, next: NextFunction) => {
     const followedUser = req.params.followedUser;
@@ -59,7 +61,6 @@ router.get(
     );
   },
 
-  isLoggedIn,
   isMatchingUser({ err: 'not allowed to unfollow user' }),
 
   unFollowUser
@@ -67,16 +68,16 @@ router.get(
 
 router.get(
   '/get-followed/:userId',
-  userExists,
   isLoggedIn,
+  userExists,
 
   getAllFollowed
 );
 
 router.get(
   '/get-followers/:userId',
-  userExists,
   isLoggedIn,
+  userExists,
 
   getAllFollowers
 );

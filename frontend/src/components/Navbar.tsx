@@ -3,7 +3,7 @@ import axios from 'axios';
 import homeIcon from '../assets/home.svg';
 import logoutIcon from '../assets/logout.svg';
 import profileIcon from '../assets/profile.svg';
-import logout from '../utils/logout';
+import logout from '../serverFunctions/logout';
 
 const Navbar = () => {
   let nav;

@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import getNumOfFollowed from '../serverFunctions/getNumOfFollwed';
 
 export type User = {
   user_id: number;
@@ -60,11 +61,12 @@ const UserProfile = () => {
   const [avatar, setAvatar] = useState('');
   const [posts, setPosts] = useState([]);
 
-  const [numOfPosts, setNumOfPosts] = useState(0);
-
   const { userId } = useParams();
+  const [numOfPosts, setNumOfPosts] = useState(0);
+  // const numOfFollowed = getNumOfFollowed(parseInt(userId!));
 
   useEffect(() => {
+    console.log('in the profile');
     getUser(
       parseInt(userId!),
       setFirstName,
@@ -73,6 +75,7 @@ const UserProfile = () => {
       setAvatar,
       setPosts
     );
+    getNumOfFollowed(parseInt(userId!));
 
     setNumOfPosts(posts.length);
   }, []);
@@ -87,14 +90,15 @@ const UserProfile = () => {
             className="w-44 h-44 rounded-full border-4 border-black"
           />
           <div>
-            <h1>{firstName}</h1>
-            <h1>{lastName}</h1>
             <h1>{username}</h1>
+            <h1>
+              {firstName} {lastName}
+            </h1>
             <h1>{numOfPosts}</h1>
+            {/* <h1>{numOfFollowed}</h1> */}
           </div>
         </div>
         {posts.map((post: Post) => {
-          console.log(post.post_id, post.image);
           return (
             <div>
               <img src={post.image} alt="" />

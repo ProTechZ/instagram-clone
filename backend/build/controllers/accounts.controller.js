@@ -47,37 +47,38 @@ export const logIn = async (req, res) => {
         if (usernameEmail.includes('@')) {
             query = 'email';
         }
-        pool.query(`SELECT * FROM users WHERE ${query} = $1`, [usernameEmail], async (err, results) => {
-            if (err) {
-                return res.send({ loggedIn: false, err });
-            }
-            else if (results.rows.length <= 0) {
-                return res.send({
-                    loggedIn: false,
-                    err: 'No user with that username or email exists',
-                });
-            }
-            const user = results.rows[0];
-            const passwordCorrect = await bcrypt.compare(password, user.password);
-            if (!passwordCorrect) {
-                return res.send({ loggedIn: false, err: 'Password is incorrect' });
-            }
-            let token = jwt.sign(user, process.env.SECRET_KEY, {
-                expiresIn: 1 * 24 * 60 * 60 * 1000,
+        console.log(`SELECT * FROM users WHERE ${query} = ${usernameEmail}`);
+        const results = await pool.query(`SELECT * FROM users WHERE ${query} = '${usernameEmail}'`);
+        if (results.rows.length <= 0) {
+            return res.send({
+                loggedIn: false,
+                err: 'No user with that username or email exists',
             });
-            res.cookie('jwt', token, {
-                maxAge: 1 * 24 * 60 * 60 * 1000,
-            });
-            return res.status(200).send({ loggedIn: true, user });
+        }
+        const user = results.rows[0];
+        const passwordCorrect = await bcrypt.compare(password, user.password);
+        if (!passwordCorrect) {
+            return res.send({ loggedIn: false, err: 'Password is incorrect' });
+        }
+        let token = jwt.sign(user, process.env.SECRET_KEY);
+        res.cookie('jwt', token, {
+            secure: false,
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpOnly: false,
+            sameSite: 'lax'
         });
+        console.log(res.getHeaders());
+        console.log({ user, loggedIn: true });
+        return res.status(200).send({ user, loggedIn: true });
     }
     catch (err) {
-        return res.status(400).send({ from: 'login', err });
+        console.error(err);
+        return res.status(400).send({ from: 'login', loggedIn: false, err });
     }
 };
 export const logOut = async (req, res) => {
     try {
-        res.clearCookie('jwt');
+        // res.clearCookie('jwt');
         return res.status(200).send({ logged_out: true });
     }
     catch (err) {

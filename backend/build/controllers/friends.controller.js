@@ -60,7 +60,7 @@ export const unFollowUser = async (req, res) => {
 export const getAllFollowed = async (req, res) => {
     try {
         const userId = req.params.userId;
-        pool.query(`SELECT * FROM followed_following WHERE user_following_id = $1`, [userId], (err, results) => {
+        pool.query(`SELECT * FROM followed_following WHERE user_following_id = $${userId}`, (err, results) => {
             if (err) {
                 return res.send({ err });
             }

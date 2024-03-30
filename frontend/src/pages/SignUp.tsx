@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Background from '../assets/Background.svg';
 import { Link, useNavigate } from 'react-router-dom';
-import signUp from '../utils/signup';
+import signUp from '../serverFunctions/signup';
 import useUserIdStore from '../store';
 
 const SignUp = () => {

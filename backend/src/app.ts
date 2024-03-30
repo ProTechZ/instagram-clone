@@ -15,14 +15,18 @@ const PORT = process.env.PORT || 3000;
 dotenv.config({ path: '../env' });
 dotenv.config({ path: ['/env/backend.env', '/env/postgres.env'] });
 
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Set-Cookie', ],
+    origin: ['http://localhost:3000'],
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 
-process.on('uncaughtException', function (err) {
-  console.log(err);
-});
 
 app.get('/', (req, res) => {
   res.send('Home Screen!');
