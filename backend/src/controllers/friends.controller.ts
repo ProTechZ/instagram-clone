@@ -79,7 +79,7 @@ export const getAllFollowed = async (req: Request, res: Response) => {
 
     return res.status(200).send({ usersFollowed, successful: true });
   } catch (err) {
-    return res.status(400).send({ from: 'login', err, successful: false });
+    return res.status(400).send({ from: 'getAllFollowed', err, successful: false });
   }
 };
 
@@ -94,6 +94,6 @@ export const getAllFollowers = async (req: Request, res: Response) => {
 
     return res.status(200).send({ followers, successful: true });
   } catch (err) {
-    return res.status(400).send({ from: 'login', err, successful: false });
+    return res.status(400).send({ from: 'getAllFollowers', err, successful: false });
   }
 };

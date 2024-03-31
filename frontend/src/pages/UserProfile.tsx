@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import getNumOfFollowed from '../serverFunctions/getNumOfFollwed';
 
@@ -24,7 +23,7 @@ export type Post = {
   num_likes: string;
 };
 
-const getUser = (
+const getUser = async (
   userId: number,
   setFirstName: any,
   setLastName: any,
@@ -32,26 +31,34 @@ const getUser = (
   setAvatar: any,
   setPosts: any
 ) => {
-  axios
-    .get(`http://localhost/users/${userId}`)
-    .then((results) => {
-      const { posts, user } = results.data;
-      setFirstName(user.first_name);
-      setLastName(user.last_name);
-      setUsername(user.username);
-      setAvatar(user.avatar);
+  try {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
 
-      const postsArray = [];
-
-      for (const [key, val] of Object.entries(posts)) {
-        postsArray.push(val);
-      }
-
-      setPosts(postsArray);
-    })
-    .catch((err) => {
-      console.error(err);
+    const results = await fetch(`http://localhost/users/${userId}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers,
     });
+    const smthing = await results.json();
+    console.log(smthing);
+    // const { posts, user } = results.data;
+    // setFirstName(user.first_name);
+    // setLastName(user.last_name);
+    // setUsername(user.username);
+    // setAvatar(user.avatar);
+
+    // const postsArray = [];
+
+    // for (const [key, val] of Object.entries(posts)) {
+    //   postsArray.push(val);
+    // }
+
+    // setPosts(postsArray);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const UserProfile = () => {

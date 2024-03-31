@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Background from '../assets/Background.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import signUp from '../serverFunctions/signup';
-import useUserIdStore from '../store';
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
@@ -17,7 +16,6 @@ const SignUp = () => {
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
-  const { setUserId } = useUserIdStore();
 
   return (
     <div
@@ -130,7 +128,6 @@ const SignUp = () => {
                 setError,
                 setShowModal,
                 () => navigate('/'),
-                setUserId
               )
             }
           >

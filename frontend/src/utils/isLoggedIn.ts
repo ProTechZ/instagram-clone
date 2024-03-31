@@ -1,10 +1,19 @@
-import axios from 'axios';
+const isLoggedIn = async () => {
+  try {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
 
-const isLoggedIn = () => {
-  const results = axios.get('http://localhost/isLoggedIn').then().catch();
-  // console.log( results.data.loggedIn)
-  // return results.data.loggedIn;
-  return false;
+    const results = await fetch('http://localhost/isLoggedIn', {
+      method: 'GET',
+      credentials: 'include',
+      headers,
+    });
+    const smthing = await results.json();
+    console.log(smthing);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export default isLoggedIn;

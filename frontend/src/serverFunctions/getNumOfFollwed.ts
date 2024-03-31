@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const getNumOfFollowed = async (userId: number) => {
   try {
     var headers = new Headers();
@@ -7,7 +5,7 @@ const getNumOfFollowed = async (userId: number) => {
     headers.append('Accept', 'application/json');
 
     const results = await fetch(
-      'http://localhost/friends/get-followed/${userId}',
+      `http://localhost/friends/get-followed/${userId}`,
       {
         method: 'GET',
         credentials: 'include',
@@ -17,7 +15,7 @@ const getNumOfFollowed = async (userId: number) => {
     const smthing = await results.json();
     console.log(smthing);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 

@@ -1,36 +1,37 @@
-import axios from 'axios';
 import Navbar from '../components/Navbar';
-import useUserIdStore from '../store';
 import { useEffect, useState } from 'react';
 import getNumOfFollowed from '../serverFunctions/getNumOfFollwed';
+import isLoggedIn from '../utils/isLoggedIn';
 
-// const getFriendsPost = (userId: number, setFriendsPosts: any) => {
-//   axios
-//     .get(`http://localhost/users/${userId}`)
-//     .then((results) => {
-//       console.log(results);
-//       const { posts, user, err } = results.data;
+const getFriendsPost = async (userId: number, setFriendsPosts: any) => {
+  try {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
 
-//       setFriendsPosts(posts);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// };
+    const results = await fetch(`http://localhost/users/${userId}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers,
+    });
+    const smthing = await results.json();
+    console.log(smthing);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const Home = () => {
   const [friendsPosts, setFriendsPosts] = useState([]);
 
-  const userId = useUserIdStore((state) => state.userId);
-  useEffect(() => {
-    getNumOfFollowed(3);
-
-    // if (userId) {
-    //   getFriendsPost(userId, setFriendsPosts);
-    //   console.log(friendsPosts)
+  // useEffect(() => {
+  //   console.log(isLoggedIn())
+    // if (isLoggedIn()) {
+      // getFriendsPost(userId, setFriendsPosts);
+    //   console.log(friendsPosts);
     //   setFriendsPosts(friendsPosts);
     // }
-  }, [userId]);
+  // }, [userId]);
 
   return (
     <div className="flex">
@@ -42,6 +43,7 @@ const Home = () => {
         {friendsPosts.map((val) => {
           return <h1 className="text-black">{val}</h1>;
         })}
+        <button onClick={isLoggedIn}>hi</button>
       </div>
     </div>
   );

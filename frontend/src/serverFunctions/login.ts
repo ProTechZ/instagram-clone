@@ -2,8 +2,7 @@ const login = async (
   usernameEmail: string,
   password: string,
   setError: any,
-  goToHome: any,
-  setUserId: any
+  goToHome: any
 ) => {
   const usernameEmailInput = document.getElementById(
     'usernameEmailInput'
@@ -30,7 +29,7 @@ const login = async (
     setError('');
 
     try {
-      var headers = new Headers();
+      const headers = new Headers();
       headers.append('Content-Type', 'application/json');
       headers.append('Accept', 'application/json');
 
@@ -43,11 +42,15 @@ const login = async (
         credentials: 'include',
         headers,
       });
-      const { loggedIn, user } = await results.json();
+      const { successful, user, err } = await results.json();
 
-      setError('');
-      setUserId(user.user_id);
-      goToHome();
+      if (!successful) {
+        setError(err);
+      } else {
+        setError('');
+        localStorage.setItem('userId', user.user_id.toString());
+        goToHome();
+      }
     } catch (err) {
       setError(err);
     }

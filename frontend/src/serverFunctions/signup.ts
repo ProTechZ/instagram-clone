@@ -1,7 +1,6 @@
-import axios from 'axios';
 import calculateDateDiff from '../utils/calculateDateDiff';
 
-const signUp = (
+const signUp = async (
   firstName: string,
   lastName: string,
   username: string,
@@ -12,7 +11,6 @@ const signUp = (
   setError: any,
   setShowModal: any,
   goToHome: any,
-  setUserId: any
 ) => {
   const ref = [
     { val: firstName, input: document.getElementsByTagName('input')[0] },
@@ -65,30 +63,38 @@ const signUp = (
     password === confirmPwrd
   ) {
     setError('');
-    axios
-      .post('http://localhost/account/signup', {
-        first_name: firstName,
-        last_name: lastName,
-        username,
-        email,
-        birthday,
-        password,
-      })
-      .then((results) => {
-        const { loggedIn, err, user } = results.data;
 
-        if (!loggedIn) {
-          setError(err);
-        } else {
-          setError('');
-          setUserId(user.user_id);
+    try {
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      headers.append('Accept', 'application/json');
 
-          goToHome();
-        }
-      })
-      .catch((err) => {
-        console.error(err);
+      const results = await fetch('http://localhost/account/signup', {
+        method: 'POST',
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          username,
+          email,
+          birthday,
+          password,
+        }),
+        credentials: 'include',
+        headers,
       });
+      const { loggedIn, user, err } = await results.json();
+
+      if (!loggedIn) {
+        setError(err);
+      } else {
+        setError('');
+        // setUserId(user.user_id);
+
+        goToHome();
+      }
+    } catch (err) {
+      setError(err);
+    }
   }
 };
 

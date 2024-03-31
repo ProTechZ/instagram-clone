@@ -2,7 +2,6 @@ import Background from '../assets/Background.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import login from '../serverFunctions/login';
 import { useState } from 'react';
-import useUserIdStore from '../store';
 
 const LogIn = () => {
   const [usernameEmail, setUsernameEmail] = useState('');
@@ -10,7 +9,6 @@ const LogIn = () => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
-  const { setUserId } = useUserIdStore();
 
   return (
     <div
@@ -55,7 +53,6 @@ const LogIn = () => {
                 password,
                 setError,
                 () => navigate('/'),
-                setUserId
               )
             }
           >
