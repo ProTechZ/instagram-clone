@@ -6,6 +6,8 @@ import NoPageHere from './pages/NoPageHere';
 import UserProfile from './pages/UserProfile';
 
 const App = () => {
+  const isLoggedIn = !!localStorage.getItem('userId');
+
   return (
     <Router>
       <Routes>
@@ -20,3 +22,4 @@ const App = () => {
 };
 
 export default App;
+

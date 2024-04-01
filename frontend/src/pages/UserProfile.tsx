@@ -41,21 +41,20 @@ const getUser = async (
       credentials: 'include',
       headers,
     });
-    const smthing = await results.json();
-    console.log(smthing);
-    // const { posts, user } = results.data;
-    // setFirstName(user.first_name);
-    // setLastName(user.last_name);
-    // setUsername(user.username);
-    // setAvatar(user.avatar);
 
-    // const postsArray = [];
+    const { user, posts } = await results.json();
+    setFirstName(user.first_name);
+    setLastName(user.last_name);
+    setUsername(user.username);
+    setAvatar(user.avatar);
 
-    // for (const [key, val] of Object.entries(posts)) {
-    //   postsArray.push(val);
-    // }
+    const postsArray = [];
 
-    // setPosts(postsArray);
+    for (const [key, val] of Object.entries(posts)) {
+      postsArray.push(val);
+    }
+
+    setPosts(postsArray);
   } catch (err) {
     console.error(err);
   }
