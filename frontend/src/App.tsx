@@ -11,15 +11,17 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<LogIn />} />
-        <Route path="/user/:userId" element={<UserProfile />} />
-        <Route path="*" element={<NoPageHere />} />
+        <Route path="/" element={isLoggedIn ? <Home /> : <LogIn />} />
+        <Route path="/signup" element={isLoggedIn ? <Home /> : <SignUp />} />
+        <Route path="/login" element={isLoggedIn ? <Home /> : <LogIn />} />
+        <Route
+          path="/user/:userId"
+          element={isLoggedIn ? <UserProfile /> : <LogIn />}
+        />
+        <Route path="*" element={isLoggedIn ? <NoPageHere /> : <LogIn />} />
       </Routes>
     </Router>
   );
 };
 
 export default App;
-

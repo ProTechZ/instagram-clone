@@ -9,6 +9,7 @@ const LogIn = () => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  const goToHome = () => navigate('/');
 
   return (
     <div
@@ -47,14 +48,7 @@ const LogIn = () => {
           <button
             className="font-bold rounded-full bg-white border-2 border-purple-300 mt-8 mb-2 py-3 px-20 "
             type="button"
-            onClick={() =>
-              login(
-                usernameEmail,
-                password,
-                setError,
-                () => navigate('/'),
-              )
-            }
+            onClick={() => login(usernameEmail, password, setError, goToHome)}
           >
             LOG IN
           </button>

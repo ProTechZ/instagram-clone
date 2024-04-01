@@ -49,6 +49,8 @@ const login = async (
       } else {
         setError('');
         localStorage.setItem('userId', user.user_id.toString());
+        
+        window.location.reload();
         goToHome();
       }
     } catch (err) {

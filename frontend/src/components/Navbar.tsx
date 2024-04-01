@@ -1,18 +1,19 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import homeIcon from '../assets/home.svg';
 import logoutIcon from '../assets/logout.svg';
 import profileIcon from '../assets/profile.svg';
 import logout from '../serverFunctions/logout';
 
 const Navbar = () => {
-
   <Link to="/login">
     <button type="button" onClick={logout}>
       Log Out
     </button>
   </Link>;
 
-  
+  const navigate = useNavigate();
+  const goToHome = () => navigate('/')
+
   return (
     <div className="flex">
       <div>
@@ -33,7 +34,7 @@ const Navbar = () => {
         </Link>
 
         <Link
-          to={`/user/${3}`}
+          to={`/user/${localStorage.getItem('userId')}`}
           className="flex items-center border-black w-full py-2 px-4 text-left"
         >
           <img src={profileIcon} alt="profile icon" className="w-5 h-5" />
@@ -42,15 +43,18 @@ const Navbar = () => {
           </button>
         </Link>
 
-        
-
-        <div className="flex items-center border-y border-black w-full py-2 px-4 text-left">
-          <img src={logoutIcon} alt="logout icon" className="w-5 h-5" />
-          <button onClick={logout} className="text-lg pl-3" type="button">
-            Log Out
-          </button>
-        </div>
-
+        {localStorage.getItem('userId') !== '' && (
+          <div className="flex items-center border-y border-black w-full py-2 px-4 text-left">
+            <img src={logoutIcon} alt="logout icon" className="w-5 h-5" />
+            <button
+              onClick={() => logout(goToHome)}
+              className="text-lg pl-3"
+              type="button"
+            >
+              Log Out
+            </button>
+          </div>
+        )}
       </div>
       <div className="w-1 h-screen bg-black"></div>
     </div>
