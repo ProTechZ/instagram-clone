@@ -1,10 +1,9 @@
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
-import getNumOfFollowed from '../serverFunctions/getAllFollowed';
 import { headers } from '../App';
 
-export type User = {
+export type UserType = {
   user_id: number;
   first_name: string;
   last_name: string;
@@ -15,7 +14,7 @@ export type User = {
   password: string;
 };
 
-export type Post = {
+export type PostType = {
   post_id: number;
   user_id: number;
   image: string;
@@ -100,7 +99,7 @@ const UserProfile = () => {
             {/* <h1>{numOfFollowed}</h1> */}
           </div>
         </div>
-        {posts.map((post: Post) => {
+        {posts.map((post: PostType) => {
           return (
             <div>
               <img src={post.image} alt="" />

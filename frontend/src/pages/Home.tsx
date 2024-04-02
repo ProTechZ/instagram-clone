@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import getAllfollowed from '../serverFunctions/getAllFollowed';
 import { headers } from '../App';
 import shuffleArray from '../utils/shuffleArray';
-import { Post, User } from './UserProfile';
+import { PostType, UserType } from './UserProfile';
+import Post from '../components/Post';
 
 const getFriendsPost = async (followedIds: number[]) => {
   const friendsPosts = [];
@@ -16,7 +17,7 @@ const getFriendsPost = async (followedIds: number[]) => {
         headers,
       });
       const { user, posts } = await results.json();
-      const modifiedPosts = posts.map((val: Post) => {
+      const modifiedPosts = posts.map((val: PostType) => {
         return { ...val, ...user };
       });
 
@@ -49,17 +50,16 @@ const Home = () => {
 
         {friendsPosts.length >= 1 &&
           friendsPosts.map((post) => {
-            console.log(typeof post.date_posted);
             return (
-              <div className="p-5 border border-black">
-                <h1 className="text-black">{post.username}</h1>
-                <img  src={post.avatar} />
-                <h1 className="text-black">{post.date_posted}</h1>
-                <h1 className="text-black">{post.num_likes}</h1>
-                <h1 className="text-black">{post.caption}</h1>
-
-                <img src={post.image} />
-              </div>
+              <Post
+                key={post.post_id}
+                avatar={post.avatar}
+                username={post.username}
+                datePosted={post.date_posted}
+                numLikes={post.num_likes}
+                caption={post.caption}
+                image={post.image}
+              />
             );
           })}
 
