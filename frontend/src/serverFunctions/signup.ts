@@ -1,3 +1,4 @@
+import { headers } from '../App';
 import calculateDateDiff from '../utils/calculateDateDiff';
 
 const signUp = async (
@@ -10,7 +11,7 @@ const signUp = async (
   confirmPwrd: string,
   setError: any,
   setShowModal: any,
-  goToHome: any,
+  goToHome: any
 ) => {
   const ref = [
     { val: firstName, input: document.getElementsByTagName('input')[0] },
@@ -65,10 +66,6 @@ const signUp = async (
     setError('');
 
     try {
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-
       const results = await fetch('http://localhost/account/signup', {
         method: 'POST',
         body: JSON.stringify({

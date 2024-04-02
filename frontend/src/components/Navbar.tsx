@@ -25,7 +25,7 @@ const Navbar = () => {
         </h1>
         <Link
           to="/"
-          className="flex items-center border-y border-black w-full py-2 px-4 text-left"
+          className="flex items-center border-y border-black w-full py-2 px-4 text-left hover:bg-purple-100"
         >
           <img src={homeIcon} alt="home icon" className="w-5 h-5" />
           <button className="text-lg pl-3" type="button">
@@ -35,7 +35,7 @@ const Navbar = () => {
 
         <Link
           to={`/user/${localStorage.getItem('userId')}`}
-          className="flex items-center border-black w-full py-2 px-4 text-left"
+          className="flex items-center border-black w-full py-2 px-4 text-left hover:bg-purple-100"
         >
           <img src={profileIcon} alt="profile icon" className="w-5 h-5" />
           <button className="text-lg pl-3" type="button">
@@ -44,11 +44,11 @@ const Navbar = () => {
         </Link>
 
         {localStorage.getItem('userId') !== '' && (
-          <div className="flex items-center border-y border-black w-full py-2 px-4 text-left">
+          <div className="flex items-center border-y border-black w-full py-2 px-4 hover:bg-purple-100">
             <img src={logoutIcon} alt="logout icon" className="w-5 h-5" />
             <button
               onClick={() => logout(goToHome)}
-              className="text-lg pl-3"
+              className="text-lg pl-3 w-full text-left"
               type="button"
             >
               Log Out

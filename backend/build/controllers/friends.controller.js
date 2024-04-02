@@ -54,7 +54,7 @@ export const unFollowUser = async (req, res) => {
 export const getAllFollowed = async (req, res) => {
     try {
         const userId = req.params.userId;
-        const results = await pool.query(`SELECT * FROM followed_following WHERE user_following_id = $${userId}`);
+        const results = await pool.query(`SELECT * FROM followed_following WHERE user_following_id = ${userId}`);
         const usersFollowed = results.rows.map((val) => val.user_followed_id);
         return res.status(200).send({ usersFollowed, successful: true });
     }

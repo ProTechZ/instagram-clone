@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
-import getNumOfFollowed from '../serverFunctions/getNumOfFollwed';
+import getNumOfFollowed from '../serverFunctions/getAllFollowed';
+import { headers } from '../App';
 
 export type User = {
   user_id: number;
@@ -32,10 +33,6 @@ const getUser = async (
   setPosts: any
 ) => {
   try {
-    var headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-
     const results = await fetch(`http://localhost/users/${userId}`, {
       method: 'GET',
       credentials: 'include',
@@ -81,7 +78,6 @@ const UserProfile = () => {
       setAvatar,
       setPosts
     );
-    getNumOfFollowed(parseInt(userId!));
 
     setNumOfPosts(posts.length);
   }, []);

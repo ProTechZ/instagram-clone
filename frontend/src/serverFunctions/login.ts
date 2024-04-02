@@ -1,3 +1,5 @@
+import { headers } from "../App";
+
 const login = async (
   usernameEmail: string,
   password: string,
@@ -29,10 +31,6 @@ const login = async (
     setError('');
 
     try {
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-
       const results = await fetch('http://localhost/account/login', {
         method: 'POST',
         body: JSON.stringify({

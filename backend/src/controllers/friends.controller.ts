@@ -72,7 +72,7 @@ export const getAllFollowed = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const results = await pool.query(
-      `SELECT * FROM followed_following WHERE user_following_id = $${userId}`
+      `SELECT * FROM followed_following WHERE user_following_id = ${userId}`
     );
 
     const usersFollowed = results.rows.map((val) => val.user_followed_id);

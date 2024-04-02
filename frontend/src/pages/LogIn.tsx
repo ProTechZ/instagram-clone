@@ -36,23 +36,35 @@ const LogIn = () => {
 
           <input
             id="passwordInput"
-            type="text"
+            type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="py-5 px-2 rounded-md border h-8 border-purple-300"
+            className="py-5 px-2 rounded-md border mb-2 h-8 border-purple-300"
           />
 
-          {error && <p className="text-red-600 text-sm italic mt-1">{error}</p>}
+          {/* change from dots to text on password field */}
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              onClick={() => {
+                const x = document.getElementById(
+                  'passwordInput'
+                ) as HTMLInputElement;
+                x.type = x.type === 'password' ? 'text' : 'password';
+              }}
+            />
+            <h1 className="text-s">Show Password</h1>
+          </div>
 
+          {error && <p className="text-red-600 text-sm italic mt-1">{error}</p>}
           <button
-            className="font-bold rounded-full bg-white border-2 border-purple-300 mt-8 mb-2 py-3 px-20 "
+            className="font-bold rounded-full bg-white border-2 border-purple-300 mt-8 mb-2 py-3 px-20 hover:bg-purple-100"
             type="button"
             onClick={() => login(usernameEmail, password, setError, goToHome)}
           >
             LOG IN
           </button>
-
           <Link to="/signup">
             <p className="text-center text-blue-600 text-sm hover:underline ">
               Don't have an account?

@@ -5,6 +5,10 @@ import LogIn from './pages/LogIn';
 import NoPageHere from './pages/NoPageHere';
 import UserProfile from './pages/UserProfile';
 
+export const headers = new Headers();
+headers.append('Content-Type', 'application/json');
+headers.append('Accept', 'application/json');
+
 const App = () => {
   const isLoggedIn = !!localStorage.getItem('userId');
 
