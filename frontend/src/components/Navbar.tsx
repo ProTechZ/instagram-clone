@@ -12,20 +12,17 @@ const Navbar = () => {
   </Link>;
 
   const navigate = useNavigate();
-  const goToHome = () => navigate('/')
+  const goToHome = () => navigate('/');
 
   return (
     <div className="flex">
-      <div>
-        <h1
-          style={{ WebkitTextStroke: '1px #b570fb' }}
-          className="tracking-widest font-bold text-white text-4xl p-8 pl-4 pb-12"
-        >
+      <div className="flex flex-col items-center">
+        <h1 className="tracking-widest font-bold text-black text-4xl px-8 py-10 text-center ">
           INSTAHUB
         </h1>
         <Link
           to="/"
-          className="flex items-center border-y border-black w-full py-2 px-4 text-left hover:bg-purple-100"
+          className="flex items-center border-y-2 border-purple-300 w-full py-2 px-4 text-left hover:bg-purple-100"
         >
           <img src={homeIcon} alt="home icon" className="w-5 h-5" />
           <button className="text-lg pl-3" type="button">
@@ -35,7 +32,7 @@ const Navbar = () => {
 
         <Link
           to={`/user/${localStorage.getItem('userId')}`}
-          className="flex items-center border-black w-full py-2 px-4 text-left hover:bg-purple-100"
+          className="flex items-center 100 w-full py-2 px-4 text-left hover:bg-purple-100"
         >
           <img src={profileIcon} alt="profile icon" className="w-5 h-5" />
           <button className="text-lg pl-3" type="button">
@@ -44,7 +41,7 @@ const Navbar = () => {
         </Link>
 
         {localStorage.getItem('userId') !== '' && (
-          <div className="flex items-center border-y border-black w-full py-2 px-4 hover:bg-purple-100">
+          <div className="flex items-center border-y-2 border-purple-300 w-full py-2 px-4 hover:bg-purple-100">
             <img src={logoutIcon} alt="logout icon" className="w-5 h-5" />
             <button
               onClick={() => logout(goToHome)}
@@ -56,7 +53,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
-      <div className="w-1 h-screen bg-black"></div>
+      <div className="w-1 min-h-screen max-h-full bg-purple-500" />
     </div>
   );
 };

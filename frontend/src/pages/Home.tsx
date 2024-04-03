@@ -46,7 +46,7 @@ const Home = () => {
     <div className="flex">
       <Navbar />
       <div className="ml-10">
-        <h1 className="text-black">These arer posts from your friends</h1>
+        <h1 className="text-black">These are posts from your friends</h1>
 
         {friendsPosts.length >= 1 &&
           friendsPosts.map((post) => {
@@ -59,6 +59,7 @@ const Home = () => {
                 numLikes={post.num_likes}
                 caption={post.caption}
                 image={post.image}
+                comments={['hi', 'pine me', 'bro tinks hes ihi']}
               />
             );
           })}
