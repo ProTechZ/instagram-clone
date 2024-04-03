@@ -3,7 +3,7 @@ import pool from '../configs/postgres.config.js';
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
 
     const userQueryResults = await pool.query(
       `SELECT * FROM users WHERE user_id = ${userId}`
@@ -29,7 +29,7 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
     const fieldToUpdate = Object.keys(req.body)[0];
     const updatedValue = Object.values(req.body)[0];
 
@@ -64,7 +64,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
     const results = await pool.query(
       `DELETE FROM users WHERE user_id = ${userId}`
     );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import getTimeSincePosted from '../utils/getTimeSincePosted';
-import heartIcon from '../assets/heart.png'
-import redHeartIcon from '../assets/heart_red.png'
+import heartIcon from '../assets/heart.png';
+import redHeartIcon from '../assets/heart_red.png';
 
 const Post = ({
   avatar,
@@ -47,16 +47,19 @@ const Post = ({
         </div>
       </div>
       <img src={image} className=" border border-y-black" />
-      <div className="flex items-center border-y-2 border-purple-300 w-full py-2 px-4 hover:bg-purple-100">
-        <img src={heartIcon} alt="logout icon" className="w-5 h-5" />
-        <button
-          // onClick={() => logout(goToHome)}
-          className="text-lg pl-3 w-full text-left"
-          type="button"
-        >
-          Log Out
-        </button>
-      </div>
+      {/* <div className="flex items-center  py-2 px-4 hover:bg-purple-100"> */}
+      <button
+        // onClick={() => logout(goToHome)}
+        className="text-lg  w-fit text-left "
+        type="button"
+      >
+        <img
+          src={redHeartIcon}
+          alt="logout icon"
+          className="w-6 h-6 hover:bg-red-100"
+        ></img>
+      </button>
+      {/* </div> */}
       <h1 className="text-black">{numLikes}</h1>
       <h1 className="text-black"> {caption}</h1>
     </div>

@@ -4,6 +4,7 @@ import {
   createPost,
   updatePost,
   deletePost,
+  likePost,
 } from '../controllers/posts.controller.js';
 import userExists from '../middleware/userExists.js';
 import postExists from '../middleware/postExists.js';
@@ -52,5 +53,12 @@ router.delete(
   deletePost
 );
 
-export default router;
+router.get(
+  '/like-post/:postId/:userId',
+  postExists,
+  isLoggedIn,
+  isMatchingUser({ err: 'not allowed to delete post' }),
+  likePost
+);
 
+export default router;

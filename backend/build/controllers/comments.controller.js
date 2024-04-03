@@ -1,8 +1,7 @@
 import pool from '../configs/postgres.config.js';
 export const createComment = async (req, res) => {
     try {
-        const user = res.locals.user;
-        const post = res.locals.post;
+        const { user, post } = res.locals;
         const { comment } = req.body;
         const results = await pool.query('INSERT INTO comments (user_id, post_id, num_likes, text)' +
             ' VALUES($1, $2, $3, $4) RETURNING * ', [user.user_id, post.post_id, 0, comment]);
@@ -60,7 +59,7 @@ export const editComment = async (req, res) => {
 };
 export const deleteComment = async (req, res) => {
     try {
-        const commentId = req.params.commentId;
+        const { commentId } = req.params;
         const results = await pool.query(`DELETE FROM comments WHERE comment_id = ${commentId}`);
         return res
             .status(200)

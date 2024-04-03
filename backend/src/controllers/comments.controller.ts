@@ -3,8 +3,7 @@ import pool from '../configs/postgres.config.js';
 
 export const createComment = async (req: Request, res: Response) => {
   try {
-    const user = res.locals.user;
-    const post = res.locals.post;
+    const {user, post} = res.locals
     const { comment } = req.body;
 
     const results = await pool.query(
@@ -82,7 +81,7 @@ export const editComment = async (req: Request, res: Response) => {
 
 export const deleteComment = async (req: Request, res: Response) => {
   try {
-    const commentId = req.params.commentId;
+    const {commentId} = req.params;
 
     const results = await pool.query(
       `DELETE FROM comments WHERE comment_id = ${commentId}`

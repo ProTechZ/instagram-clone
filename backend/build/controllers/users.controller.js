@@ -1,7 +1,7 @@
 import pool from '../configs/postgres.config.js';
 export const getUser = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const { userId } = req.params;
         const userQueryResults = await pool.query(`SELECT * FROM users WHERE user_id = ${userId}`);
         if (userQueryResults.rows.length <= 0) {
             return res.send({ successful: false, err: 'User doesnt exist' });
@@ -17,7 +17,7 @@ export const getUser = async (req, res) => {
 };
 export const updateUser = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const { userId } = req.params;
         const fieldToUpdate = Object.keys(req.body)[0];
         const updatedValue = Object.values(req.body)[0];
         if (fieldToUpdate != 'first_name' &&
@@ -46,7 +46,7 @@ export const updateUser = async (req, res) => {
 };
 export const deleteUser = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const { userId } = req.params;
         const results = await pool.query(`DELETE FROM users WHERE user_id = ${userId}`);
         return res
             .status(200)

@@ -3,8 +3,7 @@ import pool from '../configs/postgres.config.js';
 
 export const followUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
-    const userToFollow = req.params.userToFollow;
+    const { userId, userToFollow } = req.params;
 
     const results = await pool.query(
       `SELECT * FROM followed_following WHERE user_followed_id = ${userToFollow} AND user_following_id = ${userId}`
@@ -70,7 +69,7 @@ export const unFollowUser = async (req: Request, res: Response) => {
 
 export const getAllFollowed = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
     const results = await pool.query(
       `SELECT * FROM followed_following WHERE user_following_id = ${userId}`
     );
@@ -79,13 +78,15 @@ export const getAllFollowed = async (req: Request, res: Response) => {
 
     return res.status(200).send({ usersFollowed, successful: true });
   } catch (err) {
-    return res.status(400).send({ from: 'getAllFollowed', err, successful: false });
+    return res
+      .status(400)
+      .send({ from: 'getAllFollowed', err, successful: false });
   }
 };
 
 export const getAllFollowers = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const { userId } = req.params;
     const results = await pool.query(
       `SELECT * FROM followed_following WHERE user_followed_id = ${userId}`
     );
@@ -94,6 +95,8 @@ export const getAllFollowers = async (req: Request, res: Response) => {
 
     return res.status(200).send({ followers, successful: true });
   } catch (err) {
-    return res.status(400).send({ from: 'getAllFollowers', err, successful: false });
+    return res
+      .status(400)
+      .send({ from: 'getAllFollowers', err, successful: false });
   }
 };
