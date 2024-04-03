@@ -2,12 +2,12 @@ import { headers } from "../App";
 
 const logout = async (goToHome: any) => {
   try {
-    const results = await fetch('http://localhost/account/logout', {
+    await fetch('http://localhost/account/logout', {
       method: 'GET',
       credentials: 'include',
       headers,
     });
-    const smthing = await results.json();
+
     localStorage.setItem('userId', '');
 
     window.location.reload();

@@ -11,6 +11,7 @@ const getAllFollowed = async (userId: number) => {
       }
     );
     const { usersFollowed } = await results.json();
+    console.log(usersFollowed)
     return usersFollowed;
   } catch (err) {
     console.error(err);

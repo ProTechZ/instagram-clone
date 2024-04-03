@@ -52,7 +52,7 @@ const Home = () => {
           friendsPosts.map((post) => {
             return (
               <Post
-                key={post.post_id}
+                id={post.post_id}
                 avatar={post.avatar}
                 username={post.username}
                 datePosted={post.date_posted}

@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import getTimeSincePosted from '../utils/getTimeSincePosted';
 import heartIcon from '../assets/heart.png';
 import redHeartIcon from '../assets/heart_red.png';
+import toggleLike from '../utils/toggleLike';
 
 const Post = ({
+  id,
   avatar,
   username,
   datePosted,
@@ -12,6 +14,7 @@ const Post = ({
   image,
   comments,
 }: {
+  id: number;
   avatar: string;
   username: string;
   datePosted: string;
@@ -22,6 +25,7 @@ const Post = ({
 }) => {
   const [time, setTime] = useState(0);
   const [isTimeInHours, setIsTimeInHours] = useState(false);
+  const [isPostLiked, setIsPostLiked] = useState(false);
 
   useEffect(() => {
     const { time, hours } = getTimeSincePosted(datePosted);
@@ -49,12 +53,12 @@ const Post = ({
       <img src={image} className=" border border-y-black" />
       {/* <div className="flex items-center  py-2 px-4 hover:bg-purple-100"> */}
       <button
-        // onClick={() => logout(goToHome)}
+        onClick={() => toggleLike(id, isPostLiked, setIsPostLiked)}
         className="text-lg  w-fit text-left "
         type="button"
       >
         <img
-          src={redHeartIcon}
+          src={isPostLiked ? redHeartIcon : heartIcon}
           alt="logout icon"
           className="w-6 h-6 hover:bg-red-100"
         ></img>

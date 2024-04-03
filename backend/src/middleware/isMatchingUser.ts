@@ -14,6 +14,7 @@ export type User = {
 
 const isMatchingUser = (deniedMsg?: Object) => {
   return (req: Request, res: Response, next: NextFunction) => {
+    
     const { jwt: token } = req.cookies;
     let currUserId = null;
 
