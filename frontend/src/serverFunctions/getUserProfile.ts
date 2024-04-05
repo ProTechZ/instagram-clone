@@ -1,4 +1,5 @@
-import { headers } from "../App";
+import { headers } from '../App';
+import { UserType } from '../pages/UserProfile';
 
 export const getUser = async (userId: number) => {
   try {
@@ -9,7 +10,7 @@ export const getUser = async (userId: number) => {
     });
 
     const { user } = await results.json();
-    
+
     return user;
   } catch (err) {
     console.error(err);
@@ -31,4 +32,3 @@ export const getPosts = async (userId: number) => {
     console.error(err);
   }
 };
-

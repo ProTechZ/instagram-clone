@@ -2,6 +2,8 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
 import { getPosts, getUser } from '../serverFunctions/getUserProfile';
+import getAllFollowed from '../serverFunctions/getAllFollowed';
+import getAllFollowers from '../serverFunctions/getAllFollowers';
 
 export type UserType = {
   user_id: number;
@@ -32,13 +34,31 @@ const UserProfile = () => {
 
   const { userId } = useParams();
   const [numOfPosts, setNumOfPosts] = useState(0);
-  // const numOfFollowed = getNumOfFollowed(parseInt(userId!));
+
+  const [numOfFollowed, setNumOfFollowed] = useState(0);
+  const [numOfFollowers, setNumOfFollowers] = useState(0);
 
   useEffect(() => {
-    getPosts(parseInt(userId!)).then((posts) => {
+    const fetchData = async () => {
+      const id = parseInt(userId!);
+
+      const posts = await getPosts(id);
       setPosts(posts);
       setNumOfPosts(posts.length);
-    });
+
+      const { first_name, last_name, username, avatar } = (await getUser(
+        id
+      )) as UserType;
+      setFirstName(first_name);
+      setLastName(last_name);
+      setUsername(username);
+      setAvatar(avatar);
+
+      setNumOfFollowed((await getAllFollowed(id)).length);
+      setNumOfFollowers((await getAllFollowers(id)).length);
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -57,18 +77,26 @@ const UserProfile = () => {
               {firstName} {lastName}
             </h1>
             <h1>{numOfPosts}</h1>
-            {/* <h1>{numOfFollowed}</h1> */}
+            <h1>{numOfFollowed} followed</h1>
+            <h1>
+              {numOfFollowers} {numOfFollowers <= 1 ? 'follower' : 'followers'}
+            </h1>
           </div>
         </div>
-        {posts.map((post: PostType) => {
-          console.log(post);
-          return (
-            <div>
-              {/* <img src={post.image} alt="" /> */}
-              <h1>{post.caption} </h1>
-            </div>
-          );
-        })}
+
+        <div className="grid grid-cols-3 gap-4">
+          {posts.map((post: PostType) => {
+            return (
+              <div>
+                <img
+                  src={post.image}
+                  alt={post.caption}
+                  className="border border-black"
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

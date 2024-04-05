@@ -10,11 +10,9 @@ export const signUp = async (req, res) => {
         const encryptedPsswrd = await bcrypt.hash(password, 10);
         const results = await pool.query(`INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES(${first_name}, ${last_name}, ${username}, ${email}, ${avatar}, ${birthday}, $${encryptedPsswrd}) RETURNING *`);
         const user = results.rows[0];
-        let token = jwt.sign(user, process.env.SECRET_KEY, {
-            expiresIn: 1 * 24 * 60 * 60 * 1000,
-        });
+        let token = jwt.sign(user, process.env.SECRET_KEY);
         res.cookie('jwt', token, {
-            maxAge: 1 * 24 * 60 * 60 * 1000,
+            maxAge: 1 * 24 * 60 * 60 * 1000 * 7,
             httpOnly: true,
         });
         return res.status(201).send({
@@ -50,7 +48,7 @@ export const logIn = async (req, res) => {
         let token = jwt.sign(user, process.env.SECRET_KEY);
         res.cookie('jwt', token, {
             secure: false,
-            maxAge: 1 * 24 * 60 * 60 * 1000,
+            maxAge: 1 * 24 * 60 * 60 * 1000 * 7,
             httpOnly: false,
             sameSite: 'lax',
         });

@@ -10,6 +10,7 @@ const getAllFollowed = async (userId: number) => {
         headers,
       }
     );
+
     const { usersFollowed } = await results.json();
 
     return usersFollowed;

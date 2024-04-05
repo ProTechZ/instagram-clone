@@ -43,13 +43,12 @@ const Home = () => {
     };
 
     fetchData();
-
   }, []);
 
   return (
     <div className="flex">
       <Navbar />
-      <div className="ml-10">
+      <div className="mx-10">
         <h1 className="text-black">These are posts from your friends</h1>
 
         {friendsPosts.length >= 1 &&

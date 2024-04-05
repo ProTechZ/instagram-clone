@@ -10,7 +10,7 @@ headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
 
 const App = () => {
-  const isLoggedIn = !!localStorage.getItem('userId');
+  const isLoggedIn = !!document.cookie;
 
   return (
     <Router>
