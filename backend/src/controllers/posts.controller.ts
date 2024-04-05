@@ -1,6 +1,21 @@
 import { Request, Response } from 'express';
 import pool from '../configs/postgres.config.js';
 
+export const isPostLiked = async (req: Request, res: Response) => {
+  try {
+    const { postId, userId } = req.params;
+
+    const results = await pool.query(
+      `SELECT * FROM posts_likes WHERE post_id = ${postId} AND user_id = ${userId}`
+    );
+
+
+    return res.status(201).send({ liked: !!results.rows[0] });
+  } catch (err) {
+    return res.status(400).send({ from: 'likePost', successful: false, err });
+  }
+};
+
 export const likePost = async (req: Request, res: Response) => {
   try {
     const { postId, userId } = req.params;
@@ -46,7 +61,7 @@ export const unlikePost = async (req: Request, res: Response) => {
     await pool.query(
       `DELETE FROM posts_likes where user_id=${userId} AND post_id=${postId}`
     );
-    
+
     return res.status(201).send({ successful: true });
   } catch (err) {
     return res.status(400).send({ from: 'unlikePost', successful: false, err });

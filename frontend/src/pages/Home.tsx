@@ -35,12 +35,16 @@ const Home = () => {
   const userId = parseInt(localStorage.getItem('userId')!);
 
   useEffect(() => {
-    getAllfollowed(userId).then((followedIds) => {
-      getFriendsPost(followedIds).then((results) => {
-        setFriendsPosts(results);
-      });
-    });
-  }, [userId]);
+    const fetchData = async () => {
+      const followedIds = await getAllfollowed(userId);
+      const friendsPosts = await getFriendsPost(followedIds);
+
+      setFriendsPosts(friendsPosts);
+    };
+
+    fetchData();
+
+  }, []);
 
   return (
     <div className="flex">

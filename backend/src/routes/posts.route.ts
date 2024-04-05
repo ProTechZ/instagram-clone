@@ -6,6 +6,7 @@ import {
   deletePost,
   likePost,
   unlikePost,
+  isPostLiked,
 } from '../controllers/posts.controller.js';
 import userExists from '../middleware/userExists.js';
 import postExists from '../middleware/postExists.js';
@@ -66,6 +67,13 @@ router.get(
   postExists,
   isLoggedIn,
   unlikePost
+);
+
+router.get(
+  '/is-post-liked/post:postId/user:userId',
+  postExists,
+  isLoggedIn,
+  isPostLiked
 );
 
 export default router;

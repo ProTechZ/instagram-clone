@@ -20,12 +20,10 @@ export const signUp = async (req: Request, res: Response) => {
 
     const user = results.rows[0];
 
-    let token = jwt.sign(user, process.env.SECRET_KEY!, {
-      expiresIn: 1 * 24 * 60 * 60 * 1000,
-    });
+    let token = jwt.sign(user, process.env.SECRET_KEY!);
 
     res.cookie('jwt', token, {
-      maxAge: 1 * 24 * 60 * 60 * 1000,
+      maxAge: 1 * 24 * 60 * 60 * 1000 * 7,
       httpOnly: true,
     });
 
@@ -71,7 +69,7 @@ export const logIn = async (req: Request, res: Response) => {
 
     res.cookie('jwt', token, {
       secure: false,
-      maxAge: 1 * 24 * 60 * 60 * 1000,
+      maxAge: 1 * 24 * 60 * 60 * 1000 * 7,
       httpOnly: false,
       sameSite: 'lax',
     });
@@ -87,8 +85,8 @@ export const logOut = async (req: Request, res: Response) => {
   try {
     res.clearCookie('jwt');
 
-    return res.status(200).send({successful:true, logged_out: true });
+    return res.status(200).send({ successful: true, logged_out: true });
   } catch (err) {
-    return res.status(400).send({ from: 'logout', successful:false, err });
+    return res.status(400).send({ from: 'logout', successful: false, err });
   }
 };

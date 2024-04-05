@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import homeIcon from '../assets/home.svg';
 import logoutIcon from '../assets/logout.svg';
 import profileIcon from '../assets/profile.svg';
+import plusIcon from '../assets/plus.svg';
 import logout from '../serverFunctions/logout';
 
 const Navbar = () => {
@@ -22,7 +23,7 @@ const Navbar = () => {
         </h1>
         <Link
           to="/"
-          className="flex items-center border-y-2 border-purple-300 w-full py-2 px-4 text-left hover:bg-purple-100"
+          className="flex items-center border-t-2 border-purple-300 w-full py-2 pl-4 text-left hover:bg-purple-100"
         >
           <img src={homeIcon} alt="home icon" className="w-5 h-5" />
           <button className="text-lg pl-3" type="button">
@@ -32,16 +33,34 @@ const Navbar = () => {
 
         <Link
           to={`/user/${localStorage.getItem('userId')}`}
-          className="flex items-center 100 w-full py-2 px-4 text-left hover:bg-purple-100"
+          className="flex items-center border-t-2 border-purple-300 w-full py-2 pl-4 text-left hover:bg-purple-100"
         >
-          <img src={profileIcon} alt="profile icon" className="w-5 h-5" />
+          <img
+            src={profileIcon}
+            alt="profile icon"
+            className="w-5 h-5"
+          />
           <button className="text-lg pl-3" type="button">
             Profile
           </button>
         </Link>
 
+        <Link
+          to={`/user/${localStorage.getItem('userId')}`}
+          className="flex items-center border-t-2 border-purple-300 w-full py-2 pl-3 text-left hover:bg-purple-100"
+        >
+          <img
+            src={plusIcon}
+            alt="profile icon"
+            className="w-6 h-6"
+          />
+          <button className="text-lg pl-3" type="button">
+            Create Post
+          </button>
+        </Link>
+
         {localStorage.getItem('userId') !== '' && (
-          <div className="flex items-center border-y-2 border-purple-300 w-full py-2 px-4 hover:bg-purple-100">
+          <div className="flex items-center border-y-2 border-purple-300 w-full py-2 pl-4 hover:bg-purple-100">
             <img src={logoutIcon} alt="logout icon" className="w-5 h-5" />
             <button
               onClick={() => logout(goToHome)}

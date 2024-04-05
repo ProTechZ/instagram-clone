@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import getTimeSincePosted from '../utils/getTimeSincePosted';
 import heartIcon from '../assets/heart.png';
 import redHeartIcon from '../assets/heart_red.png';
-import toggleLike from '../utils/toggleLike';
+import toggleLike from '../serverFunctions/toggleLike';
+import isPostLiked from '../serverFunctions/isPostLiked';
 
 const Post = ({
   id,
@@ -25,13 +26,19 @@ const Post = ({
 }) => {
   const [time, setTime] = useState(0);
   const [isTimeInHours, setIsTimeInHours] = useState(false);
-  const [isPostLiked, setIsPostLiked] = useState(false);
+  const [isLikedByUser, setIsLikedByUser] = useState(false);
 
   useEffect(() => {
     const { time, hours } = getTimeSincePosted(datePosted);
-
     setTime(time);
     setIsTimeInHours(hours);
+  }, []);
+
+  useEffect(() => {
+    isPostLiked(id).then((isLiked) => {
+      setIsLikedByUser(isLiked);
+    });
+    console.log(isLikedByUser, id)
   }, []);
 
   return (
@@ -51,16 +58,16 @@ const Post = ({
         </div>
       </div>
       <img src={image} className=" border border-y-black" />
-      {/* <div className="flex items-center  py-2 px-4 hover:bg-purple-100"> */}
+
       <button
-        onClick={() => toggleLike(id, isPostLiked, setIsPostLiked)}
-        className="text-lg  w-fit text-left "
+        onClick={() => toggleLike(id, isLikedByUser, setIsLikedByUser)}
+        className="text-lg w-fit text-left "
         type="button"
       >
         <img
-          src={isPostLiked ? redHeartIcon : heartIcon}
+          src={isLikedByUser ? redHeartIcon : heartIcon}
           alt="logout icon"
-          className="w-6 h-6 hover:bg-red-100"
+          className="w-6 h-6"
         ></img>
       </button>
       {/* </div> */}

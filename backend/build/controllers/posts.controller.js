@@ -1,4 +1,14 @@
 import pool from '../configs/postgres.config.js';
+export const isPostLiked = async (req, res) => {
+    try {
+        const { postId, userId } = req.params;
+        const results = await pool.query(`SELECT * FROM posts_likes WHERE post_id = ${postId} AND user_id = ${userId}`);
+        return res.status(201).send({ liked: !!results.rows[0] });
+    }
+    catch (err) {
+        return res.status(400).send({ from: 'likePost', successful: false, err });
+    }
+};
 export const likePost = async (req, res) => {
     try {
         const { postId, userId } = req.params;

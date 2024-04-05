@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
-import { headers } from '../App';
+import { getPosts, getUser } from '../serverFunctions/getUserProfile';
 
 export type UserType = {
   user_id: number;
@@ -18,42 +18,9 @@ export type PostType = {
   post_id: number;
   user_id: number;
   image: string;
-  data_posted: string;
+  date_posted: string;
   caption: string;
   num_likes: string;
-};
-
-const getUser = async (
-  userId: number,
-  setFirstName: any,
-  setLastName: any,
-  setUsername: any,
-  setAvatar: any,
-  setPosts: any
-) => {
-  try {
-    const results = await fetch(`http://localhost/users/${userId}`, {
-      method: 'GET',
-      credentials: 'include',
-      headers,
-    });
-
-    const { user, posts } = await results.json();
-    setFirstName(user.first_name);
-    setLastName(user.last_name);
-    setUsername(user.username);
-    setAvatar(user.avatar);
-
-    const postsArray = [];
-
-    for (const [key, val] of Object.entries(posts)) {
-      postsArray.push(val);
-    }
-
-    setPosts(postsArray);
-  } catch (err) {
-    console.error(err);
-  }
 };
 
 const UserProfile = () => {
@@ -61,25 +28,19 @@ const UserProfile = () => {
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [avatar, setAvatar] = useState('');
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([] as PostType[]);
 
   const { userId } = useParams();
   const [numOfPosts, setNumOfPosts] = useState(0);
   // const numOfFollowed = getNumOfFollowed(parseInt(userId!));
 
   useEffect(() => {
-    console.log('in the profile');
-    getUser(
-      parseInt(userId!),
-      setFirstName,
-      setLastName,
-      setUsername,
-      setAvatar,
-      setPosts
-    );
-
-    setNumOfPosts(posts.length);
+    getPosts(parseInt(userId!)).then((posts) => {
+      setPosts(posts);
+      setNumOfPosts(posts.length);
+    });
   }, []);
+
   return (
     <div className="flex">
       <Navbar />
@@ -100,9 +61,11 @@ const UserProfile = () => {
           </div>
         </div>
         {posts.map((post: PostType) => {
+          console.log(post);
           return (
             <div>
-              <img src={post.image} alt="" />
+              {/* <img src={post.image} alt="" /> */}
+              <h1>{post.caption} </h1>
             </div>
           );
         })}
