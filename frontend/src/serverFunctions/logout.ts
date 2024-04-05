@@ -1,6 +1,6 @@
 import { headers } from "../App";
 
-const logout = async (goToHome: any) => {
+const logout = async (goToLogin: any) => {
   try {
     await fetch('http://localhost/account/logout', {
       method: 'GET',
@@ -11,7 +11,7 @@ const logout = async (goToHome: any) => {
     localStorage.setItem('userId', '');
 
     window.location.reload();
-    goToHome();
+    goToLogin();
   } catch (err) {
     console.error(err);
   }

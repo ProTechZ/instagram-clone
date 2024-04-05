@@ -13,7 +13,7 @@ const Navbar = () => {
   </Link>;
 
   const navigate = useNavigate();
-  const goToHome = () => navigate('/');
+  const goToLogin = () => navigate('/login');
 
   return (
     <div className="flex">
@@ -35,11 +35,7 @@ const Navbar = () => {
           to={`/user/${localStorage.getItem('userId')}`}
           className="flex items-center border-t-2 border-purple-300 w-full py-2 pl-4 text-left hover:bg-purple-100"
         >
-          <img
-            src={profileIcon}
-            alt="profile icon"
-            className="w-5 h-5"
-          />
+          <img src={profileIcon} alt="profile icon" className="w-5 h-5" />
           <button className="text-lg pl-3" type="button">
             Profile
           </button>
@@ -49,11 +45,7 @@ const Navbar = () => {
           to={`/user/${localStorage.getItem('userId')}`}
           className="flex items-center border-t-2 border-purple-300 w-full py-2 pl-3 text-left hover:bg-purple-100"
         >
-          <img
-            src={plusIcon}
-            alt="profile icon"
-            className="w-6 h-6"
-          />
+          <img src={plusIcon} alt="profile icon" className="w-6 h-6" />
           <button className="text-lg pl-3" type="button">
             Create Post
           </button>
@@ -63,7 +55,7 @@ const Navbar = () => {
           <div className="flex items-center border-y-2 border-purple-300 w-full py-2 pl-4 hover:bg-purple-100">
             <img src={logoutIcon} alt="logout icon" className="w-5 h-5" />
             <button
-              onClick={() => logout(goToHome)}
+              onClick={() => logout(goToLogin)}
               className="text-lg pl-3 w-full text-left"
               type="button"
             >

@@ -59,7 +59,7 @@ const LogIn = () => {
 
           {error && <p className="text-red-600 text-sm italic mt-1">{error}</p>}
           <button
-            className="font-bold rounded-full bg-white border-2 border-purple-300 mt-8 mb-2 py-3 px-20 hover:bg-purple-100"
+            className="font-bold rounded-full border-2 border-purple-300 mt-8 mb-2 py-3 px-20 hover:bg-purple-100"
             type="button"
             onClick={() => login(usernameEmail, password, setError, goToHome)}
           >

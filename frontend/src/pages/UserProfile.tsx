@@ -33,8 +33,8 @@ const UserProfile = () => {
   const [posts, setPosts] = useState([] as PostType[]);
 
   const { userId } = useParams();
-  const [numOfPosts, setNumOfPosts] = useState(0);
 
+  const [numOfPosts, setNumOfPosts] = useState(0);
   const [numOfFollowed, setNumOfFollowed] = useState(0);
   const [numOfFollowers, setNumOfFollowers] = useState(0);
 
@@ -65,26 +65,40 @@ const UserProfile = () => {
     <div className="flex">
       <Navbar />
       <div>
-        <div className="flex">
+        <div className="flex m-10 ml-24">
           <img
             src={avatar}
-            alt="hi"
-            className="w-44 h-44 rounded-full border-4 border-black"
+            alt="avatar of user"
+            className="w-52 h-52 rounded-full border-4 border-purple-700"
           />
-          <div>
-            <h1>{username}</h1>
-            <h1>
-              {firstName} {lastName}
-            </h1>
-            <h1>{numOfPosts}</h1>
-            <h1>{numOfFollowed} followed</h1>
-            <h1>
-              {numOfFollowers} {numOfFollowers <= 1 ? 'follower' : 'followers'}
-            </h1>
+          <div className="my-5 mx-20 space-y-1">
+            <div className="flex py-1">
+              <h1 className="text-2xl mr-5">{username}</h1>
+              <button
+                className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
+                type="button"
+                // onClick={() => login(usernameEmail, password, setError, goToHome)}
+              >
+                Edit Profile
+              </button>
+            </div>
+
+            <div className="flex space-x-8 ">
+              <h1>{numOfPosts} posts</h1>
+              <h1>{numOfFollowed} following</h1>
+              <h1>
+                {numOfFollowers}{' '}
+                {numOfFollowers <= 1 ? 'follower' : 'followers'}
+              </h1>
+            </div>
+
+            <h1>{`${firstName} ${lastName}`} </h1>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <hr className="h-10 mt-10" />
+
+        <div className="grid grid-cols-3 gap-4 mx-10">
           {posts.map((post: PostType) => {
             return (
               <div>
