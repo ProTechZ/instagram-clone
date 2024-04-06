@@ -17,8 +17,8 @@ const Navbar = () => {
 
   return (
     <div className="flex">
-      <div className="flex flex-col items-center">
-        <h1 className="tracking-widest font-bold text-black text-4xl px-8 py-10 text-center ">
+      <div className="flex flex-col items-center h-fit top-0 left-0 sticky">
+        <h1 className="tracking-widest font-bold text-4xl px-8 py-10 text-center ">
           INSTAHUB
         </h1>
         <Link

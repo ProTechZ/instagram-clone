@@ -4,6 +4,7 @@ import heartIcon from '../assets/heart.png';
 import redHeartIcon from '../assets/heart_red.png';
 import toggleLike from '../serverFunctions/toggleLike';
 import isPostLiked from '../serverFunctions/isPostLiked';
+import { Link } from 'react-router-dom';
 
 const Post = ({
   id,
@@ -38,41 +39,55 @@ const Post = ({
     isPostLiked(id).then((isLiked) => {
       setIsLikedByUser(isLiked);
     });
-    console.log(isLikedByUser, id)
+    console.log(isLikedByUser, id);
   }, []);
 
   return (
-    <div className="w-1/2  border border-black rounded-lg">
-      <div className="p-5 pb-2 flex items-center space-x-2">
-        <img
-          src={avatar}
-          alt="hi"
-          className="w-16 h-16 rounded-full border-2 border-purple-300"
-        />
+    <div className="w-1/2  border border-purple-800 rounded-lg mb-10">
+      <div className="p-5 pb-2 flex items-center space-x-2 bg-purple-100">
+        <Link to={`/user/${localStorage.getItem('userId')}`}>
+          <img
+            src={avatar}
+            alt="hi"
+            className="w-16 h-16 rounded-full border-2 border-purple-300"
+          />
+        </Link>
+
         <div className="flex flex-col ">
-          <h1 className="text-black text-xl">{username}</h1>
-          <h1 className="text-black text-xl">{datePosted}</h1>
+          <Link to={`/user/${localStorage.getItem('userId')}`}>
+            <h1 className="text-xl">{username}</h1>
+          </Link>
           <h4 className="text-purple-700 text-xs">
             {time} {isTimeInHours ? 'hrs' : 'days'} ago
           </h4>
         </div>
       </div>
-      <img src={image} className=" border border-y-black" />
+      <img
+        src={image}
+        className=" border border-y-purple-800 hover:cursor-pointer"
+      />
 
-      <button
-        onClick={() => toggleLike(id, isLikedByUser, setIsLikedByUser)}
-        className="text-lg w-fit text-left "
-        type="button"
-      >
-        <img
-          src={isLikedByUser ? redHeartIcon : heartIcon}
-          alt="logout icon"
-          className="w-6 h-6"
-        ></img>
-      </button>
-      {/* </div> */}
-      <h1 className="text-black">{numLikes}</h1>
-      <h1 className="text-black"> {caption}</h1>
+      <div className="flex bg-purple-100 px-5">
+        <button
+          onClick={() => toggleLike(id, isLikedByUser, setIsLikedByUser)}
+          className="w-fit text-left flex "
+          type="button"
+        >
+          <img
+            src={isLikedByUser ? redHeartIcon : heartIcon}
+            alt="logout icon"
+            className="w-6 h-6"
+          ></img>
+        </button>
+        <h1>
+          {numLikes} {numLikes === 1 ? 'person' : 'people'} liked this
+        </h1>
+      </div>
+
+      <div className="hover:cursor-pointer flex bg-purple-100 px-5">
+        <h1> {username}</h1>
+        <h1> {caption}</h1>
+      </div>
     </div>
   );
 };

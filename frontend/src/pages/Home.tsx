@@ -48,8 +48,8 @@ const Home = () => {
   return (
     <div className="flex">
       <Navbar />
-      <div className="mx-10">
-        <h1 className="text-black">These are posts from your friends</h1>
+      <div className="mx-10 my-10">
+        <h1 className="">These are posts from your friends</h1>
 
         {friendsPosts.length >= 1 &&
           friendsPosts.map((post) => {

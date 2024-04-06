@@ -64,8 +64,8 @@ const UserProfile = () => {
   return (
     <div className="flex">
       <Navbar />
-      <div>
-        <div className="flex m-10 ml-24">
+      <div className='my-10'>
+        <div className="flex ml-24">
           <img
             src={avatar}
             alt="avatar of user"
