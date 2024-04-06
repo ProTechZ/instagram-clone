@@ -7,6 +7,7 @@ import usersRouter from './routes/users.route.js';
 import postsRouter from './routes/posts.route.js';
 import commentsRouter from './routes/comments.route.js';
 import friendsRouter from './routes/friends.route.js';
+import pool from './configs/postgres.config.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 dotenv.config({ path: '../env' });
@@ -30,6 +31,18 @@ app.get('/isloggedin', (req, res) => {
     else {
         return res.send({ loggedIn: false });
     }
+});
+app.get('/userexists/:userId', (req, res) => {
+    const { userId } = req.params;
+    pool.query('SELECT * FROM users WHERE user_id = $1', [userId], (err, results) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        else if (results.rows.length <= 0) {
+            return res.send(false);
+        }
+        return res.send(true);
+    });
 });
 app.use('/account', accountsRouter);
 app.use('/users', usersRouter);

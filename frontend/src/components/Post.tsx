@@ -44,7 +44,7 @@ const Post = ({
 
   return (
     <div className="w-1/2  border border-purple-800 rounded-lg mb-10">
-      <div className="p-5 pb-2 flex items-center space-x-2 bg-purple-100">
+      <div className="p-5 pb-2 flex items-center space-x-2">
         <Link to={`/user/${localStorage.getItem('userId')}`}>
           <img
             src={avatar}
@@ -66,8 +66,8 @@ const Post = ({
         src={image}
         className=" border border-y-purple-800 hover:cursor-pointer"
       />
-
-      <div className="flex bg-purple-100 px-5">
+ 
+      <div className="flex px-5 py-2 space-x-2">
         <button
           onClick={() => toggleLike(id, isLikedByUser, setIsLikedByUser)}
           className="w-fit text-left flex "
@@ -84,10 +84,11 @@ const Post = ({
         </h1>
       </div>
 
-      <div className="hover:cursor-pointer flex bg-purple-100 px-5">
-        <h1> {username}</h1>
+      <div className="hover:cursor-pointer flex px-5 space-x-2">
+        <h1 className='font-bold'> {username}</h1>
         <h1> {caption}</h1>
       </div>
+        <button className='px-5 text-gray-600'> View all comments</button>
     </div>
   );
 };

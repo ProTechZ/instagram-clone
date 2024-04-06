@@ -1,9 +1,10 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
 import { getPosts, getUser } from '../serverFunctions/getUserProfile';
 import getAllFollowed from '../serverFunctions/getAllFollowed';
 import getAllFollowers from '../serverFunctions/getAllFollowers';
+import userExists from '../serverFunctions/userExist';
 
 export type UserType = {
   user_id: number;
@@ -38,7 +39,15 @@ const UserProfile = () => {
   const [numOfFollowed, setNumOfFollowed] = useState(0);
   const [numOfFollowers, setNumOfFollowers] = useState(0);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    userExists(parseInt(userId!)).then((exists) => {
+      if (!exists) {
+        navigate('*');
+      }
+    });
+
     const fetchData = async () => {
       const id = parseInt(userId!);
 
@@ -64,7 +73,7 @@ const UserProfile = () => {
   return (
     <div className="flex">
       <Navbar />
-      <div className='my-10'>
+      <div className="my-10">
         <div className="flex ml-24">
           <img
             src={avatar}
