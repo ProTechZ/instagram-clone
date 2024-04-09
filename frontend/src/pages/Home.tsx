@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import getAllfollowed from '../serverFunctions/getAllFollowed';
 import { headers } from '../App';
 import shuffleArray from '../utils/shuffleArray';
-import { PostType, UserType } from './UserProfile';
+import { PostType } from '../types';
 import Post from '../components/Post';
 
 const getFriendsPost = async (followedIds: number[]) => {

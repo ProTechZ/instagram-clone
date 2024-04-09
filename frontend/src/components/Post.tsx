@@ -36,12 +36,14 @@ const Post = ({
   }, []);
 
   useEffect(() => {
-    isPostLiked(id).then((isLiked) => {
-      setIsLikedByUser(isLiked);
+    isPostLiked(id).then(({ liked }) => {
+      setIsLikedByUser(liked);
     });
-    console.log(isLikedByUser, id);
   }, []);
 
+  useEffect(() => {
+    console.log(isLikedByUser, id);
+  }, [isLikedByUser]);
   return (
     <div className="w-1/2  border border-purple-800 rounded-lg mb-10">
       <div className="p-5 pb-2 flex items-center space-x-2">
@@ -66,10 +68,11 @@ const Post = ({
         src={image}
         className=" border border-y-purple-800 hover:cursor-pointer"
       />
- 
+
       <div className="flex px-5 py-2 space-x-2">
         <button
-          onClick={() => toggleLike(id, isLikedByUser, setIsLikedByUser)}
+          // onClick={ () => toggleLike(id, isLikedByUser, setIsLikedByUser)}
+          onClick={() => console.log(isLikedByUser)}
           className="w-fit text-left flex "
           type="button"
         >
@@ -77,7 +80,7 @@ const Post = ({
             src={isLikedByUser ? redHeartIcon : heartIcon}
             alt="logout icon"
             className="w-6 h-6"
-          ></img>
+          />
         </button>
         <h1>
           {numLikes} {numLikes === 1 ? 'person' : 'people'} liked this
@@ -85,10 +88,10 @@ const Post = ({
       </div>
 
       <div className="hover:cursor-pointer flex px-5 space-x-2">
-        <h1 className='font-bold'> {username}</h1>
+        <h1 className="font-bold"> {username}</h1>
         <h1> {caption}</h1>
       </div>
-        <button className='px-5 text-gray-600'> View all comments</button>
+      <button className="px-5 text-gray-600"> View all comments</button>
     </div>
   );
 };

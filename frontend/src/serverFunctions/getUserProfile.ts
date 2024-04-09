@@ -1,5 +1,5 @@
 import { headers } from '../App';
-import { UserType } from '../pages/UserProfile';
+import { UserType } from '../types';
 
 export const getUser = async (userId: number) => {
   try {

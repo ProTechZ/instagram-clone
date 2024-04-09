@@ -16,7 +16,7 @@ const Navbar = () => {
   const goToLogin = () => navigate('/login');
 
   return (
-    <div className="flex">
+    <div className="flex z-0">
       <div className="flex flex-col items-center h-fit top-0 left-0 sticky">
         <h1 className="tracking-widest font-bold text-4xl px-8 py-10 text-center ">
           INSTAHUB
@@ -64,7 +64,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
-      <div className="w-1 min-h-screen max-h-full bg-purple-500" />
+      <div className="w-1 h-full bg-purple-500" />
     </div>
   );
 };

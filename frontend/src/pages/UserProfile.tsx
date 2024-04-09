@@ -5,26 +5,9 @@ import { getPosts, getUser } from '../serverFunctions/getUserProfile';
 import getAllFollowed from '../serverFunctions/getAllFollowed';
 import getAllFollowers from '../serverFunctions/getAllFollowers';
 import userExists from '../serverFunctions/userExist';
+import { PostType, UserType } from '../types';
 
-export type UserType = {
-  user_id: number;
-  first_name: string;
-  last_name: string;
-  username: string;
-  email: string;
-  avatar: string;
-  birthday: Date;
-  password: string;
-};
-
-export type PostType = {
-  post_id: number;
-  user_id: number;
-  image: string;
-  date_posted: string;
-  caption: string;
-  num_likes: string;
-};
+const showModal = () => {};
 
 const UserProfile = () => {
   const [firstName, setFirstName] = useState('');
@@ -114,13 +97,15 @@ const UserProfile = () => {
                 <img
                   src={post.image}
                   alt={post.caption}
-                  className="border border-black"
+                  className="border border-black hover:cursor-pointer"
+                  onClick={() => console.log('hi')}
                 />
               </div>
             );
           })}
         </div>
       </div>
+      {/* <div className="z-0 flex w-screen h-screen bg-black opacity-50"></div> */}
     </div>
   );
 };
