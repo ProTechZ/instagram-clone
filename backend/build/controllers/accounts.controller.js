@@ -8,7 +8,9 @@ export const signUp = async (req, res) => {
             ? req.body.avatar
             : 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-media-1677509740';
         const encryptedPsswrd = await bcrypt.hash(password, 10);
-        const results = await pool.query(`INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES(${first_name}, ${last_name}, ${username}, ${email}, ${avatar}, ${birthday}, $${encryptedPsswrd}) RETURNING *`);
+        console.log(`INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES('${first_name}', '${last_name}', '${username}', '${email}', '${avatar}', ${birthday}, '${encryptedPsswrd}') RETURNING *`);
+        const results = await pool.query(`INSERT INTO users(first_name, last_name, username, email, avatar, birthday, password) VALUES('${first_name}', '${last_name}', '${username}', '${email}', '${avatar}', '${birthday}', '${encryptedPsswrd}') RETURNING *`);
+        console.log(results);
         const user = results.rows[0];
         let token = jwt.sign(user, process.env.SECRET_KEY);
         res.cookie('jwt', token, {

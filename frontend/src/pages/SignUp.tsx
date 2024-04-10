@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Background from '../assets/Background.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import signUp from '../serverFunctions/signup';
@@ -15,6 +15,8 @@ const SignUp = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
 
+
+  useEffect(()=>{console.log(error)}, [error])
   const navigate = useNavigate();
 
   return (
@@ -97,7 +99,7 @@ const SignUp = () => {
 
           <label className="text-xs text-gray-400">Password</label>
           <input
-            type="text"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="py-5 px-2 rounded-md border mb-2 h-8 border-purple-300"
@@ -105,7 +107,7 @@ const SignUp = () => {
 
           <label className="text-xs text-gray-400">Confirm Password</label>
           <input
-            type="text"
+            type="password"
             value={confirmPwrd}
             onChange={(e) => setConfirmPwrd(e.target.value)}
             className="py-5 px-2 rounded-md border h-8 border-purple-300"

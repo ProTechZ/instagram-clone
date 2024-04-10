@@ -42,7 +42,7 @@ const Navbar = () => {
         </Link>
 
         <Link
-          to={`/user/${localStorage.getItem('userId')}`}
+          to={'/create'}
           className="flex items-center border-t-2 border-purple-300 w-full py-2 pl-3 text-left hover:bg-purple-100"
         >
           <img src={plusIcon} alt="profile icon" className="w-6 h-6" />
@@ -64,7 +64,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
-      <div className="w-1 h-full bg-purple-500" />
+      <div className="w-1 min-h-screen max-h-full bg-purple-500" />
     </div>
   );
 };

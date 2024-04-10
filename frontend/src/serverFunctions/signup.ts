@@ -13,6 +13,8 @@ const signUp = async (
   setShowModal: any,
   goToHome: any
 ) => {
+  console.log(1);
+
   const ref = [
     { val: firstName, input: document.getElementsByTagName('input')[0] },
     { val: lastName, input: document.getElementsByTagName('input')[1] },
@@ -26,6 +28,7 @@ const signUp = async (
   if (password !== confirmPwrd) {
     setError("Passwords don't match");
   }
+  console.log(2);
 
   for (const entry of ref) {
     const { val, input } = entry;
@@ -37,6 +40,7 @@ const signUp = async (
       input.style.borderColor = '#D8B4FD';
     }
   }
+  console.log(3);
 
   const bdaySplit = birthday.split('-');
   const bdayAsDate = new Date(
@@ -52,6 +56,7 @@ const signUp = async (
     setShowModal(true);
     return;
   }
+  console.log(4);
 
   if (
     firstName &&
@@ -79,13 +84,17 @@ const signUp = async (
         credentials: 'include',
         headers,
       });
-      const { loggedIn, user, err } = await results.json();
+      const s = await results.json();
+console.log(s);
 
+      const { loggedIn, user, err } = s;
+      
+        
       if (!loggedIn) {
         setError(err);
       } else {
         setError('');
-        // setUserId(user.user_id);
+        localStorage.setItem('userId', user.user_id);
 
         goToHome();
       }

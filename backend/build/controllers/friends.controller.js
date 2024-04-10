@@ -76,3 +76,16 @@ export const getAllFollowers = async (req, res) => {
             .send({ from: 'getAllFollowers', err, successful: false });
     }
 };
+export const isFollowing = async (req, res) => {
+    try {
+        const { followedUser, followingUser } = req.params;
+        const results = await pool.query(`SELECT * FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser}`);
+        console.log();
+        return res.status(200).send({ following: !!results.rows[0], successful: true });
+    }
+    catch (err) {
+        return res
+            .status(400)
+            .send({ from: 'getAllFollowers', err, successful: false });
+    }
+};

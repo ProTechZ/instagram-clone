@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
 import { getPosts, getUser } from '../serverFunctions/getUserProfile';
@@ -22,15 +22,9 @@ const UserProfile = () => {
   const [numOfFollowed, setNumOfFollowed] = useState(0);
   const [numOfFollowers, setNumOfFollowers] = useState(0);
 
-  const navigate = useNavigate();
+  const isUser = userId === localStorage.getItem('userId');
 
   useEffect(() => {
-    userExists(parseInt(userId!)).then((exists) => {
-      if (!exists) {
-        navigate('*');
-      }
-    });
-
     const fetchData = async () => {
       const id = parseInt(userId!);
 
@@ -50,7 +44,13 @@ const UserProfile = () => {
       setNumOfFollowers((await getAllFollowers(id)).length);
     };
 
-    fetchData();
+    userExists(parseInt(userId!)).then((exists) => {
+      if (!exists) {
+        window.location.href = 'http://localhost:3000/404';
+      } else {
+        fetchData();
+      }
+    });
   }, []);
 
   return (
@@ -66,13 +66,24 @@ const UserProfile = () => {
           <div className="my-5 mx-20 space-y-1">
             <div className="flex py-1">
               <h1 className="text-2xl mr-5">{username}</h1>
-              <button
-                className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
-                type="button"
-                // onClick={() => login(usernameEmail, password, setError, goToHome)}
-              >
-                Edit Profile
-              </button>
+              {isUser && (
+                <button
+                  className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
+                  type="button"
+                  // onClick={() => login(usernameEmail, password, setError, goToHome)}
+                >
+                  Edit Profile
+                </button>
+              )}
+              {!isUser && (
+                <button
+                  className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
+                  type="button"
+                  // onClick={() => login(usernameEmail, password, setError, goToHome)}
+                >
+                  Follow 
+                </button>
+              )}
             </div>
 
             <div className="flex space-x-8 ">
