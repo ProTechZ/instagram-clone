@@ -1,4 +1,4 @@
-import { headers } from '../App';
+import { headers } from '../../App';
 
 const isUserFollowing = async (followedUser: number, followingUser: number) => {
   try {
@@ -11,8 +11,8 @@ const isUserFollowing = async (followedUser: number, followingUser: number) => {
       }
     );
 
-    const {following} = await results.json();
-    
+    const { following } = await results.json();
+
     return following;
   } catch (err) {
     console.error(err);

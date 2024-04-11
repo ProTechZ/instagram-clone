@@ -1,4 +1,4 @@
-import { headers } from "../App";
+import { headers } from '../../App';
 
 const logout = async (goToLogin: any) => {
   try {

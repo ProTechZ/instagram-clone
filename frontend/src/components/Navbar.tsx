@@ -3,7 +3,7 @@ import homeIcon from '../assets/home.svg';
 import logoutIcon from '../assets/logout.svg';
 import profileIcon from '../assets/profile.svg';
 import plusIcon from '../assets/plus.svg';
-import logout from '../serverFunctions/logout';
+import logout from '../serverFunctions/account/logout';
 
 const Navbar = () => {
   <Link to="/login">

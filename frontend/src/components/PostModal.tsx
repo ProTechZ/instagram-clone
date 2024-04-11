@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import getTimeSincePosted from '../utils/getTimeSincePosted';
 import heartIcon from '../assets/heart.png';
 import redHeartIcon from '../assets/heart_red.png';
-import toggleLike from '../serverFunctions/toggleLike';
-import isPostLiked from '../serverFunctions/isPostLiked';
+import toggleLike from '../serverFunctions/posts/toggleLike';
+import isPostLiked from '../serverFunctions/posts/isPostLiked';
 import { Link } from 'react-router-dom';
 
 const Post = ({

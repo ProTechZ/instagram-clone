@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
-import { getPosts, getUser } from '../serverFunctions/getUserProfile';
-import getAllFollowed from '../serverFunctions/getAllFollowed';
-import getAllFollowers from '../serverFunctions/getAllFollowers';
-import userExists from '../serverFunctions/userExist';
+import { getPosts, getUser } from '../serverFunctions/user/getUserProfile';
+import getAllFollowed from '../serverFunctions/friends/getAllFollowed';
+import getAllFollowers from '../serverFunctions/friends/getAllFollowers';
+import userExists from '../serverFunctions/user/userExist';
 import { PostType, UserType } from '../types';
-import isUserFollowing from '../serverFunctions/isUserFollowing';
+import isUserFollowing from '../serverFunctions/friends/isUserFollowing';
 
 const showModal = () => {};
 
@@ -93,7 +93,7 @@ const UserProfile = () => {
                   Unfollow
                 </button>
               )}
-              {!isUser  && !isFollowing && (
+              {!isUser && !isFollowing && (
                 <button
                   className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
                   type="button"

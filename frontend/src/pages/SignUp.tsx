@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Background from '../assets/Background.svg';
 import { Link, useNavigate } from 'react-router-dom';
-import signUp from '../serverFunctions/signup';
+import signUp from '../serverFunctions/account/signup';
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
@@ -15,8 +15,9 @@ const SignUp = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-
-  useEffect(()=>{console.log(error)}, [error])
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
   const navigate = useNavigate();
 
   return (

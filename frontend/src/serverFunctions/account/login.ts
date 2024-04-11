@@ -1,4 +1,4 @@
-import { headers } from "../App";
+import { headers } from '../../App';
 
 const login = async (
   usernameEmail: string,
@@ -47,7 +47,7 @@ const login = async (
       } else {
         setError('');
         localStorage.setItem('userId', user.user_id.toString());
-        
+
         window.location.reload();
         goToHome();
       }

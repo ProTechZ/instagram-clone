@@ -1,4 +1,4 @@
-import { headers } from '../App';
+import { headers } from '../../App';
 
 const isPostLiked = async (postId: number) => {
   const userId = localStorage.getItem('userId');

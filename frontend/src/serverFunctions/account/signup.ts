@@ -1,5 +1,5 @@
-import { headers } from '../App';
-import calculateDateDiff from '../utils/calculateDateDiff';
+import { headers } from '../../App';
+import calculateDateDiff from '../../utils/calculateDateDiff';
 
 const signUp = async (
   firstName: string,
@@ -85,11 +85,10 @@ const signUp = async (
         headers,
       });
       const s = await results.json();
-console.log(s);
+      console.log(s);
 
       const { loggedIn, user, err } = s;
-      
-        
+
       if (!loggedIn) {
         setError(err);
       } else {
