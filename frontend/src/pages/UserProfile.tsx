@@ -6,6 +6,7 @@ import getAllFollowed from '../serverFunctions/getAllFollowed';
 import getAllFollowers from '../serverFunctions/getAllFollowers';
 import userExists from '../serverFunctions/userExist';
 import { PostType, UserType } from '../types';
+import isUserFollowing from '../serverFunctions/isUserFollowing';
 
 const showModal = () => {};
 
@@ -23,6 +24,7 @@ const UserProfile = () => {
   const [numOfFollowers, setNumOfFollowers] = useState(0);
 
   const isUser = userId === localStorage.getItem('userId');
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +44,13 @@ const UserProfile = () => {
 
       setNumOfFollowed((await getAllFollowed(id)).length);
       setNumOfFollowers((await getAllFollowers(id)).length);
+
+      setIsFollowing(
+        await isUserFollowing(
+          parseInt(userId!),
+          parseInt(localStorage.getItem('userId')!)
+        )
+      );
     };
 
     userExists(parseInt(userId!)).then((exists) => {
@@ -75,13 +84,22 @@ const UserProfile = () => {
                   Edit Profile
                 </button>
               )}
-              {!isUser && (
+              {!isUser && isFollowing && (
                 <button
                   className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
                   type="button"
                   // onClick={() => login(usernameEmail, password, setError, goToHome)}
                 >
-                  Follow 
+                  Unfollow
+                </button>
+              )}
+              {!isUser  && !isFollowing && (
+                <button
+                  className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
+                  type="button"
+                  // onClick={() => login(usernameEmail, password, setError, goToHome)}
+                >
+                  Follow
                 </button>
               )}
             </div>
