@@ -3,8 +3,7 @@ import { headers } from '../../App';
 const login = async (
   usernameEmail: string,
   password: string,
-  setError: any,
-  goToHome: any
+  setError: any
 ) => {
   const usernameEmailInput = document.getElementById(
     'usernameEmailInput'
@@ -48,8 +47,7 @@ const login = async (
         setError('');
         localStorage.setItem('userId', user.user_id.toString());
 
-        window.location.reload();
-        goToHome();
+        window.location.href = 'http://localhost:3000/';
       }
     } catch (err) {
       setError(err);

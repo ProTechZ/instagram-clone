@@ -16,7 +16,7 @@ router.get(
   getUser
 );
 
-router.put(
+router.post(
   '/:userId',
   userExists,
 

@@ -1,5 +1,4 @@
 import { headers } from '../../App';
-import calculateDateDiff from '../../utils/calculateDateDiff';
 
 const updateUser = async (
   firstName: string,
@@ -7,28 +6,15 @@ const updateUser = async (
   username: string,
   email: string,
   birthday: string,
-  password: string,
-  confirmPwrd: string,
-  setError: any,
-  setShowModal: any,
-  goToHome: any
+  setError: any
 ) => {
-  console.log(1);
-
   const ref = [
     { val: firstName, input: document.getElementsByTagName('input')[0] },
     { val: lastName, input: document.getElementsByTagName('input')[1] },
     { val: username, input: document.getElementsByTagName('input')[2] },
     { val: email, input: document.getElementsByTagName('input')[3] },
     { val: birthday, input: document.getElementsByTagName('input')[4] },
-    { val: password, input: document.getElementsByTagName('input')[5] },
-    { val: confirmPwrd, input: document.getElementsByTagName('input')[6] },
   ];
-
-  if (password !== confirmPwrd) {
-    setError("Passwords don't match");
-  }
-  console.log(2);
 
   for (const entry of ref) {
     const { val, input } = entry;
@@ -40,38 +26,14 @@ const updateUser = async (
       input.style.borderColor = '#D8B4FD';
     }
   }
-  console.log(3);
 
-  const bdaySplit = birthday.split('-');
-  const bdayAsDate = new Date(
-    parseInt(bdaySplit[0]),
-    parseInt(bdaySplit[1]) - 1,
-    parseInt(bdaySplit[2])
-  );
+  const userId = localStorage.getItem('userId');
 
-  const userAgeInDays = calculateDateDiff(bdayAsDate);
-
-  // 15 years old
-  if (userAgeInDays < 5479) {
-    setShowModal(true);
-    return;
-  }
-  console.log(4);
-
-  if (
-    firstName &&
-    lastName &&
-    username &&
-    email &&
-    birthday &&
-    password &&
-    confirmPwrd &&
-    password === confirmPwrd
-  ) {
+  if (firstName && lastName && username && email && birthday) {
     setError('');
 
     try {
-      const results = await fetch('http://localhost/account/signup', {
+      const results = await fetch(`http://localhost/users/${userId}`, {
         method: 'POST',
         body: JSON.stringify({
           first_name: firstName,
@@ -79,23 +41,19 @@ const updateUser = async (
           username,
           email,
           birthday,
-          password,
         }),
         credentials: 'include',
         headers,
       });
-      const s = await results.json();
-      console.log(s);
 
-      const { loggedIn, user, err } = s;
+      const { successful, err } = await results.json();
 
-      if (!loggedIn) {
+      if (!successful) {
         setError(err);
       } else {
         setError('');
-        localStorage.setItem('userId', user.user_id);
 
-        goToHome();
+        window.location.href = `http://localhost:3000/user/${userId}`;
       }
     } catch (err) {
       setError(err);

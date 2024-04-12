@@ -1,5 +1,5 @@
 import Background from '../assets/Background.svg';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import login from '../serverFunctions/user/login';
 import { useState } from 'react';
 
@@ -7,9 +7,6 @@ const LogIn = () => {
   const [usernameEmail, setUsernameEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
-  const navigate = useNavigate();
-  const goToHome = () => navigate('/');
 
   return (
     <div
@@ -61,7 +58,7 @@ const LogIn = () => {
           <button
             className="font-bold rounded-full border-2 border-purple-300 mt-8 mb-2 py-3 px-20 hover:bg-purple-100"
             type="button"
-            onClick={() => login(usernameEmail, password, setError, goToHome)}
+            onClick={() => login(usernameEmail, password, setError)}
           >
             LOG IN
           </button>

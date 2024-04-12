@@ -10,7 +10,7 @@ const signUp = async (
   password: string,
   confirmPwrd: string,
   setError: any,
-  setShowModal: any,
+  setShowModal: any
 ) => {
   console.log(1);
 
@@ -83,18 +83,15 @@ const signUp = async (
         credentials: 'include',
         headers,
       });
-      const s = await results.json();
-      console.log(s);
-
-      const { loggedIn, user, err } = s;
-
+      const { loggedIn, user, err } = await results.json();
+      
       if (!loggedIn) {
         setError(err);
       } else {
         setError('');
         localStorage.setItem('userId', user.user_id);
 
-        window.location.href='http://localhost:3000/'
+        window.location.href = 'http://localhost:3000/';
       }
     } catch (err) {
       setError(err);

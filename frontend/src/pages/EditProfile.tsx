@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Background from '../assets/Background.svg';
-import { Link, useNavigate } from 'react-router-dom';
 import signUp from '../serverFunctions/user/signup';
 import { UserType } from '../types';
 import { getUser } from '../serverFunctions/user/getUserProfile';
+import updateUser from '../serverFunctions/user/updateUser';
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
@@ -11,7 +11,6 @@ const EditProfile = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [birthday, setBirthday] = useState('');
-  const [avatar, setAvatar] = useState('');
 
   const [error, setError] = useState('');
 
@@ -19,7 +18,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { first_name, last_name, username, email, birthday, avatar } =
+      const { first_name, last_name, username, email, birthday } =
         (await getUser(userId)) as UserType;
 
       setFirstName(first_name);
@@ -27,7 +26,6 @@ const EditProfile = () => {
       setUsername(username);
       setEmail(email);
       setBirthday(birthday.toString());
-      setAvatar(avatar);
     };
 
     fetchData();
@@ -98,20 +96,16 @@ const EditProfile = () => {
             <button
               className="hover:bg-purple-100 font-semibold rounded-full border-2 border-purple-300 w-1/2 py-2 mx-1"
               type="button"
-              // onClick={() =>
-              // signUp(
-              //   firstName,
-              //   lastName,
-              //   username,
-              //   email,
-              //   birthday,
-              //   password,
-              //   confirmPwrd,
-              //   setError,
-              //   setShowModal,
-              //   () => navigate('/')
-              // )
-              // }
+              onClick={() =>
+                updateUser(
+                  firstName,
+                  lastName,
+                  username,
+                  email,
+                  birthday,
+                  setError
+                )
+              }
             >
               Save
             </button>
