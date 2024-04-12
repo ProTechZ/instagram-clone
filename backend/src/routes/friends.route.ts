@@ -41,20 +41,20 @@ router.get(
 );
 
 router.get(
-  '/unfollow/:userId/:followedUser',
+  '/unfollow/:userId/:userToUnfollow',
   isLoggedIn,
 
   userExists,
   (req: Request, res: Response, next: NextFunction) => {
-    const followedUser = req.params.followedUser;
+    const userToUnfollow = req.params.userToUnfollow;
 
     pool.query(
-      `SELECT * FROM users WHERE user_id = ${followedUser}`,
+      `SELECT * FROM users WHERE user_id = ${userToUnfollow}`,
       (err, results) => {
         if (err) {
           return res.status(400).send(err);
         } else if (results.rows.length <= 0) {
-          return res.status(400).send(`user ${followedUser} does not exist`);
+          return res.status(400).send(`user ${userToUnfollow} does not exist`);
         }
 
         next();

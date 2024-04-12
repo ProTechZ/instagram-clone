@@ -35,31 +35,19 @@ export const followUser = async (req: Request, res: Response) => {
 export const unFollowUser = async (req: Request, res: Response) => {
   try {
     const followingUser = req.params.userId;
-    const followedUser = req.params.followedUser;
+    const followedUser = req.params.userToUnfollow;
 
     const results = await pool.query(
-      `SELECT * FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser}`
+      `DELETE FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser} RETURNING *`
     );
 
-    if (results.rows.length <= 0) {
-      return res.send({
-        successful: false,
-        msg: `User ${followingUser} is not following user ${followedUser}`,
-      });
-    } else {
-      const results = await pool.query(
-        `DELETE FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser} RETURNING *`,
-        [followedUser, followingUser]
-      );
+    const entry = results.rows[0];
 
-      const entry = results.rows[0];
-
-      return res.status(201).send({
-        successful: true,
-        msg: `User ${followingUser} unfollowed user ${followedUser}`,
-        entry,
-      });
-    }
+    return res.status(201).send({
+      successful: true,
+      msg: `User ${followingUser} unfollowed user ${followedUser}`,
+      entry,
+    });
   } catch (err) {
     return res
       .status(400)
@@ -111,7 +99,9 @@ export const isFollowing = async (req: Request, res: Response) => {
 
     console.log();
 
-    return res.status(200).send({ following:!!results.rows[0], successful: true });
+    return res
+      .status(200)
+      .send({ following: !!results.rows[0], successful: true });
   } catch (err) {
     return res
       .status(400)

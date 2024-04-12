@@ -7,6 +7,20 @@ import getAllFollowers from '../serverFunctions/friends/getAllFollowers';
 import userExists from '../serverFunctions/user/userExist';
 import { PostType, UserType } from '../types';
 import isUserFollowing from '../serverFunctions/friends/isUserFollowing';
+import followUser from '../serverFunctions/friends/followUser';
+import unFollowUser from '../serverFunctions/friends/unfollowUser';
+
+const Button = ({ text, onClick }: { text: string; onClick: any }) => {
+  return (
+    <button
+      className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
+      type="button"
+      onClick={onClick}
+    >
+      {text}
+    </button>
+  );
+};
 
 const showModal = () => {};
 
@@ -17,43 +31,38 @@ const UserProfile = () => {
   const [avatar, setAvatar] = useState('');
   const [posts, setPosts] = useState([] as PostType[]);
 
-  const { userId } = useParams();
+  const userId = parseInt(useParams().userId!);
 
   const [numOfPosts, setNumOfPosts] = useState(0);
   const [numOfFollowed, setNumOfFollowed] = useState(0);
   const [numOfFollowers, setNumOfFollowers] = useState(0);
 
-  const isUser = userId === localStorage.getItem('userId');
+  const isUser = userId.toString() === localStorage.getItem('userId');
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const id = parseInt(userId!);
-
-      const posts = await getPosts(id);
+      const posts = await getPosts(userId);
       setPosts(posts);
       setNumOfPosts(posts.length);
 
       const { first_name, last_name, username, avatar } = (await getUser(
-        id
+        userId
       )) as UserType;
       setFirstName(first_name);
       setLastName(last_name);
       setUsername(username);
       setAvatar(avatar);
 
-      setNumOfFollowed((await getAllFollowed(id)).length);
-      setNumOfFollowers((await getAllFollowers(id)).length);
+      setNumOfFollowed((await getAllFollowed(userId)).length);
+      setNumOfFollowers((await getAllFollowers(userId)).length);
 
       setIsFollowing(
-        await isUserFollowing(
-          parseInt(userId!),
-          parseInt(localStorage.getItem('userId')!)
-        )
+        await isUserFollowing(userId, parseInt(localStorage.getItem('userId')!))
       );
     };
 
-    userExists(parseInt(userId!)).then((exists) => {
+    userExists(userId).then((exists) => {
       if (!exists) {
         window.location.href = 'http://localhost:3000/404';
       } else {
@@ -75,32 +84,24 @@ const UserProfile = () => {
           <div className="my-5 mx-20 space-y-1">
             <div className="flex py-1">
               <h1 className="text-2xl mr-5">{username}</h1>
-              {isUser && (
-                <button
-                  className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
-                  type="button"
-                  // onClick={() => login(usernameEmail, password, setError, goToHome)}
-                >
-                  Edit Profile
-                </button>
-              )}
+              {isUser && <Button text="Edit Profile" onClick={() => {}} />}
               {!isUser && isFollowing && (
-                <button
-                  className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
-                  type="button"
-                  // onClick={() => login(usernameEmail, password, setError, goToHome)}
-                >
-                  Unfollow
-                </button>
+                <Button
+                  text="Unfollow"
+                  onClick={() => {
+                    unFollowUser(userId!);
+                    window.location.reload();
+                  }}
+                />
               )}
               {!isUser && !isFollowing && (
-                <button
-                  className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
-                  type="button"
-                  // onClick={() => login(usernameEmail, password, setError, goToHome)}
-                >
-                  Follow
-                </button>
+                <Button
+                  text="Follow"
+                  onClick={() => {
+                    followUser(userId!);
+                    window.location.reload();
+                  }}
+                />
               )}
             </div>
 

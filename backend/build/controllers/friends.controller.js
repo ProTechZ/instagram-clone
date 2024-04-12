@@ -26,23 +26,14 @@ export const followUser = async (req, res) => {
 export const unFollowUser = async (req, res) => {
     try {
         const followingUser = req.params.userId;
-        const followedUser = req.params.followedUser;
-        const results = await pool.query(`SELECT * FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser}`);
-        if (results.rows.length <= 0) {
-            return res.send({
-                successful: false,
-                msg: `User ${followingUser} is not following user ${followedUser}`,
-            });
-        }
-        else {
-            const results = await pool.query(`DELETE FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser} RETURNING *`, [followedUser, followingUser]);
-            const entry = results.rows[0];
-            return res.status(201).send({
-                successful: true,
-                msg: `User ${followingUser} unfollowed user ${followedUser}`,
-                entry,
-            });
-        }
+        const followedUser = req.params.userToUnfollow;
+        const results = await pool.query(`DELETE FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser} RETURNING *`);
+        const entry = results.rows[0];
+        return res.status(201).send({
+            successful: true,
+            msg: `User ${followingUser} unfollowed user ${followedUser}`,
+            entry,
+        });
     }
     catch (err) {
         return res
@@ -81,7 +72,9 @@ export const isFollowing = async (req, res) => {
         const { followedUser, followingUser } = req.params;
         const results = await pool.query(`SELECT * FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser}`);
         console.log();
-        return res.status(200).send({ following: !!results.rows[0], successful: true });
+        return res
+            .status(200)
+            .send({ following: !!results.rows[0], successful: true });
     }
     catch (err) {
         return res
