@@ -18,27 +18,28 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
         const { userId } = req.params;
-        const fieldToUpdate = Object.keys(req.body)[0];
-        const updatedValue = Object.values(req.body)[0];
-        if (fieldToUpdate != 'first_name' &&
-            fieldToUpdate != 'last_name' &&
-            fieldToUpdate != 'username' &&
-            fieldToUpdate != 'email' &&
-            fieldToUpdate != 'avatar' &&
-            fieldToUpdate != 'birthday') {
-            return res
-                .status(400)
-                .send({ successful: false, err: 'invalid field to update' });
+        const toUpdate = {};
+        for (const key in req.body) {
+            if (!!key) {
+                toUpdate[key] = req.body[key];
+            }
         }
-        else if (!updatedValue) {
-            return res
-                .status(400)
-                .send({ successful: false, err: 'no update value' });
+        for (const fieldToUpdate in toUpdate) {
+            if (fieldToUpdate != 'first_name' &&
+                fieldToUpdate != 'last_name' &&
+                fieldToUpdate != 'username' &&
+                fieldToUpdate != 'email' &&
+                fieldToUpdate != 'avatar' &&
+                fieldToUpdate != 'birthday') {
+                return res
+                    .status(400)
+                    .send({ successful: false, err: 'invalid field to update' });
+            }
+            else {
+                await pool.query(`UPDATE users SET ${fieldToUpdate} = '${toUpdate[fieldToUpdate]}' WHERE user_id = ${userId}`);
+            }
         }
-        const results = await pool.query(`UPDATE users SET ${fieldToUpdate} = '${updatedValue}' WHERE user_id = ${userId}`);
-        return res
-            .status(200)
-            .send({ successful: true, updatedUser: results.rows[0] });
+        return res.status(200).send({ successful: true });
     }
     catch (err) {
         return res.status(400).send({ from: 'updateUser', successful: false, err });

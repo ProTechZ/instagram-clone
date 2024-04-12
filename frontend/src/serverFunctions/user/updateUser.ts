@@ -1,7 +1,7 @@
 import { headers } from '../../App';
 import calculateDateDiff from '../../utils/calculateDateDiff';
 
-const signUp = async (
+const updateUser = async (
   firstName: string,
   lastName: string,
   username: string,
@@ -103,4 +103,4 @@ const signUp = async (
   }
 };
 
-export default signUp;
+export default updateUser;

@@ -5,6 +5,7 @@ import LogIn from './pages/LogIn';
 import NoPageHere from './pages/NoPageHere';
 import UserProfile from './pages/UserProfile';
 import CreatePost from './pages/CreatePost';
+import EditProfile from './pages/EditProfile';
 
 export const headers = new Headers();
 headers.append('Content-Type', 'application/json');
@@ -19,11 +20,19 @@ const App = () => {
         <Route path="/" element={isLoggedIn ? <Home /> : <LogIn />} />
         <Route path="/signup" element={isLoggedIn ? <Home /> : <SignUp />} />
         <Route path="/login" element={isLoggedIn ? <Home /> : <LogIn />} />
-        <Route path="/create" element={isLoggedIn ? <Home /> : <CreatePost />} />
+        <Route
+          path="/create"
+          element={isLoggedIn ? <CreatePost /> : <LogIn />}
+        />
         <Route
           path="/user/:userId"
           element={isLoggedIn ? <UserProfile /> : <LogIn />}
         />
+        <Route
+          path="/edit-profile"
+          element={isLoggedIn ? <EditProfile /> : <LogIn />}
+        />
+
         <Route path="*" element={isLoggedIn ? <NoPageHere /> : <LogIn />} />
         <Route path="404" element={isLoggedIn ? <NoPageHere /> : <LogIn />} />
       </Routes>

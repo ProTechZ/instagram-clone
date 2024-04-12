@@ -10,17 +10,15 @@ import isUserFollowing from '../serverFunctions/friends/isUserFollowing';
 import followUser from '../serverFunctions/friends/followUser';
 import unFollowUser from '../serverFunctions/friends/unfollowUser';
 
-const Button = ({ text, onClick }: { text: string; onClick: any }) => {
-  return (
-    <button
-      className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
-      type="button"
-      onClick={onClick}
-    >
-      {text}
-    </button>
-  );
-};
+const Button = ({ text, onClick }: { text: string; onClick: any }) => (
+  <button
+    className="font-medium text-sm rounded-lg border-2 border-purple-300 px-3 hover:bg-pink-200"
+    type="button"
+    onClick={onClick}
+  >
+    {text}
+  </button>
+);
 
 const showModal = () => {};
 
@@ -84,7 +82,14 @@ const UserProfile = () => {
           <div className="my-5 mx-20 space-y-1">
             <div className="flex py-1">
               <h1 className="text-2xl mr-5">{username}</h1>
-              {isUser && <Button text="Edit Profile" onClick={() => {}} />}
+              {isUser && (
+                <Button
+                  text="Edit Profile"
+                  onClick={() => {
+                    window.location.href = 'http://localhost:3000/edit-profile';
+                  }}
+                />
+              )}
               {!isUser && isFollowing && (
                 <Button
                   text="Unfollow"

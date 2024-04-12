@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import pool from '../configs/postgres.config.js';
+import { UserType } from '../app.js';
 
 export const getUser = async (req: Request, res: Response) => {
   try {
@@ -30,33 +31,34 @@ export const getUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const fieldToUpdate = Object.keys(req.body)[0];
-    const updatedValue = Object.values(req.body)[0];
+    const toUpdate: any = {};
 
-    if (
-      fieldToUpdate != 'first_name' &&
-      fieldToUpdate != 'last_name' &&
-      fieldToUpdate != 'username' &&
-      fieldToUpdate != 'email' &&
-      fieldToUpdate != 'avatar' &&
-      fieldToUpdate != 'birthday'
-    ) {
-      return res
-        .status(400)
-        .send({ successful: false, err: 'invalid field to update' });
-    } else if (!updatedValue) {
-      return res
-        .status(400)
-        .send({ successful: false, err: 'no update value' });
+    for (const key in req.body) {
+      if (!!key) {
+        toUpdate[key] = req.body[key];
+      }
     }
 
-    const results = await pool.query(
-      `UPDATE users SET ${fieldToUpdate} = '${updatedValue}' WHERE user_id = ${userId}`
-    );
+    for (const fieldToUpdate in toUpdate) {
+      if (
+        fieldToUpdate != 'first_name' &&
+        fieldToUpdate != 'last_name' &&
+        fieldToUpdate != 'username' &&
+        fieldToUpdate != 'email' &&
+        fieldToUpdate != 'avatar' &&
+        fieldToUpdate != 'birthday'
+      ) {
+        return res
+          .status(400)
+          .send({ successful: false, err: 'invalid field to update' });
+      } else {
+        await pool.query(
+          `UPDATE users SET ${fieldToUpdate} = '${toUpdate[fieldToUpdate]}' WHERE user_id = ${userId}`
+        );
+      }
+    }
 
-    return res
-      .status(200)
-      .send({ successful: true, updatedUser: results.rows[0] });
+    return res.status(200).send({ successful: true });
   } catch (err) {
     return res.status(400).send({ from: 'updateUser', successful: false, err });
   }

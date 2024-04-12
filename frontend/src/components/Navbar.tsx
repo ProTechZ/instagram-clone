@@ -3,7 +3,7 @@ import homeIcon from '../assets/home.svg';
 import logoutIcon from '../assets/logout.svg';
 import profileIcon from '../assets/profile.svg';
 import plusIcon from '../assets/plus.svg';
-import logout from '../serverFunctions/account/logout';
+import logout from '../serverFunctions/user/logout';
 
 const Navbar = () => {
   <Link to="/login">
@@ -34,7 +34,11 @@ const Navbar = () => {
         <Link
           to={`/user/${localStorage.getItem('userId')}`}
           className="flex items-center border-t-2 border-purple-300 w-full py-2 pl-4 text-left hover:bg-purple-100"
-          onClick={() => {window.location.href = `http://localhost:3000/user/${localStorage.getItem('userId')}`;}}
+          onClick={() => {
+            window.location.href = `http://localhost:3000/user/${localStorage.getItem(
+              'userId'
+            )}`;
+          }}
         >
           <img src={profileIcon} alt="profile icon" className="w-5 h-5" />
           <button className="text-lg pl-3" type="button">

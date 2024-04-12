@@ -1,6 +1,6 @@
 import Background from '../assets/Background.svg';
 import { Link, useNavigate } from 'react-router-dom';
-import login from '../serverFunctions/account/login';
+import login from '../serverFunctions/user/login';
 import { useState } from 'react';
 
 const LogIn = () => {

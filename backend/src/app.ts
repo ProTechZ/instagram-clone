@@ -8,8 +8,18 @@ import usersRouter from './routes/users.route.js';
 import postsRouter from './routes/posts.route.js';
 import commentsRouter from './routes/comments.route.js';
 import friendsRouter from './routes/friends.route.js';
-import jwt from 'jsonwebtoken';
 import pool from './configs/postgres.config.js';
+
+export type UserType = {
+  user_id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  avatar: string;
+  birthday: Date;
+  password: string;
+};
 
 const app = express();
 const PORT = process.env.PORT || 3000;
