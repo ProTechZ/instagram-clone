@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
 import { getPosts, getUser } from '../serverFunctions/user/getUserProfile';
-import getAllFollowed from '../serverFunctions/friends/getAllFollowed';
+import getAllFollowed from '../serverFunctions/friends/getAllFollowing';
 import getAllFollowers from '../serverFunctions/friends/getAllFollowers';
 import userExists from '../serverFunctions/user/userExist';
 import { PostType, UserType } from '../types';

@@ -41,24 +41,34 @@ export const unFollowUser = async (req, res) => {
             .send({ successful: false, from: 'unFollowUser', err });
     }
 };
-export const getAllFollowed = async (req, res) => {
+export const getAllFollowing = async (req, res) => {
     try {
         const { userId } = req.params;
         const results = await pool.query(`SELECT * FROM followed_following WHERE user_following_id = ${userId}`);
-        const usersFollowed = results.rows.map((val) => val.user_followed_id);
-        return res.status(200).send({ usersFollowed, successful: true });
+        const following = [];
+        const promises = results.rows.map(async ({ user_followed_id }) => {
+            const results = await pool.query(`SELECT * FROM users WHERE user_id = ${user_followed_id}`);
+            following.push(results.rows[0]);
+        });
+        await Promise.all(promises);
+        return res.status(200).send({ following, successful: true });
     }
     catch (err) {
         return res
             .status(400)
-            .send({ from: 'getAllFollowed', err, successful: false });
+            .send({ from: 'getAllFollowing', err, successful: false });
     }
 };
 export const getAllFollowers = async (req, res) => {
     try {
         const { userId } = req.params;
         const results = await pool.query(`SELECT * FROM followed_following WHERE user_followed_id = ${userId}`);
-        const followers = results.rows.map((val) => val.user_following_id);
+        const followers = [];
+        const promises = results.rows.map(async ({ user_following_id }) => {
+            const results = await pool.query(`SELECT * FROM users WHERE user_id = ${user_following_id}`);
+            followers.push(results.rows[0]);
+        });
+        await Promise.all(promises);
         return res.status(200).send({ followers, successful: true });
     }
     catch (err) {
@@ -71,7 +81,6 @@ export const isFollowing = async (req, res) => {
     try {
         const { followedUser, followingUser } = req.params;
         const results = await pool.query(`SELECT * FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser}`);
-        console.log();
         return res
             .status(200)
             .send({ following: !!results.rows[0], successful: true });

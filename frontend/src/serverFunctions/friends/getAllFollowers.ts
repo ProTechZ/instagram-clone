@@ -12,7 +12,6 @@ const getAllFollowers = async (userId: number) => {
     );
 
     const { followers } = await results.json();
-
     return followers;
   } catch (err) {
     console.error(err);

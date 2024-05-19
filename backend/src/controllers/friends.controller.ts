@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import pool from '../configs/postgres.config.js';
+import { UserType } from '../app.js';
 
 export const followUser = async (req: Request, res: Response) => {
   try {
@@ -55,20 +56,28 @@ export const unFollowUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllFollowed = async (req: Request, res: Response) => {
+export const getAllFollowing = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const results = await pool.query(
       `SELECT * FROM followed_following WHERE user_following_id = ${userId}`
     );
 
-    const usersFollowed = results.rows.map((val) => val.user_followed_id);
+    const following: UserType[] = [];
+    const promises = results.rows.map(async ({ user_followed_id }) => {
+      const results = await pool.query(
+        `SELECT * FROM users WHERE user_id = ${user_followed_id}`
+      );
+      following.push(results.rows[0]);
+    });
 
-    return res.status(200).send({ usersFollowed, successful: true });
+    await Promise.all(promises);
+
+    return res.status(200).send({ following, successful: true });
   } catch (err) {
     return res
       .status(400)
-      .send({ from: 'getAllFollowed', err, successful: false });
+      .send({ from: 'getAllFollowing', err, successful: false });
   }
 };
 
@@ -79,7 +88,15 @@ export const getAllFollowers = async (req: Request, res: Response) => {
       `SELECT * FROM followed_following WHERE user_followed_id = ${userId}`
     );
 
-    const followers = results.rows.map((val) => val.user_following_id);
+    const followers: UserType[] = [];
+    const promises = results.rows.map(async ({ user_following_id }) => {
+      const results = await pool.query(
+        `SELECT * FROM users WHERE user_id = ${user_following_id}`
+      );
+      followers.push(results.rows[0]);
+    });
+
+    await Promise.all(promises);
 
     return res.status(200).send({ followers, successful: true });
   } catch (err) {
@@ -96,8 +113,6 @@ export const isFollowing = async (req: Request, res: Response) => {
     const results = await pool.query(
       `SELECT * FROM followed_following WHERE user_followed_id = ${followedUser} AND user_following_id = ${followingUser}`
     );
-
-    console.log();
 
     return res
       .status(200)

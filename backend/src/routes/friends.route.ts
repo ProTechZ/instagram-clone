@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import {
   followUser,
   unFollowUser,
-  getAllFollowed,
+  getAllFollowing,
   getAllFollowers,
   isFollowing,
 } from '../controllers/friends.controller.js';
@@ -68,11 +68,11 @@ router.get(
 );
 
 router.get(
-  '/get-followed/:userId',
+  '/get-following/:userId',
   isLoggedIn,
   userExists,
 
-  getAllFollowed
+  getAllFollowing
 );
 
 router.get(

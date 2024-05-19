@@ -1,5 +1,5 @@
 import express from 'express';
-import { followUser, unFollowUser, getAllFollowed, getAllFollowers, isFollowing, } from '../controllers/friends.controller.js';
+import { followUser, unFollowUser, getAllFollowing, getAllFollowers, isFollowing, } from '../controllers/friends.controller.js';
 import userExists from '../middleware/userExists.js';
 import isMatchingUser from '../middleware/isMatchingUser.js';
 import isLoggedIn from '../middleware/isLoggedIn.js';
@@ -29,7 +29,7 @@ router.get('/unfollow/:userId/:userToUnfollow', isLoggedIn, userExists, (req, re
         next();
     });
 }, isMatchingUser({ err: 'not allowed to unfollow user' }), unFollowUser);
-router.get('/get-followed/:userId', isLoggedIn, userExists, getAllFollowed);
+router.get('/get-following/:userId', isLoggedIn, userExists, getAllFollowing);
 router.get('/get-followers/:userId', isLoggedIn, userExists, getAllFollowers);
 router.get('/is-following/:followedUser/:followingUser', async (req, res, next) => {
     const { followedUser, followingUser } = req.params;

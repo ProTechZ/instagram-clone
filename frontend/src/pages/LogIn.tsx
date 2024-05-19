@@ -1,12 +1,12 @@
-import Background from '../assets/Background.svg';
-import { Link } from 'react-router-dom';
-import login from '../serverFunctions/user/login';
-import { useState } from 'react';
+import Background from "../assets/Background.svg";
+import { Link } from "react-router-dom";
+import login from "../serverFunctions/user/login";
+import { useState } from "react";
 
 const LogIn = () => {
-  const [usernameEmail, setUsernameEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [usernameEmail, setUsernameEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   return (
     <div
@@ -15,7 +15,7 @@ const LogIn = () => {
     >
       <div className="flex flex-col justify-evenly items-center bg-white rounded-3xl mb-24 w-1/4 h-1/2 border-2 border-purple-300">
         <h1
-          style={{ WebkitTextStroke: '1px #b570fb' }}
+          style={{ WebkitTextStroke: "1px #b570fb" }}
           className="tracking-widest font-bold  text-white text-5xl "
         >
           INSTAHUB
@@ -46,9 +46,9 @@ const LogIn = () => {
               type="checkbox"
               onClick={() => {
                 const x = document.getElementById(
-                  'passwordInput'
+                  "passwordInput"
                 ) as HTMLInputElement;
-                x.type = x.type === 'password' ? 'text' : 'password';
+                x.type = x.type === "password" ? "text" : "password";
               }}
             />
             <h1 className="text-s">Show Password</h1>

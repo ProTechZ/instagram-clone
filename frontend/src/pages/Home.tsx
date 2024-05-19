@@ -1,6 +1,6 @@
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
-import getAllfollowed from '../serverFunctions/friends/getAllFollowed';
+import getAllfollowed from '../serverFunctions/friends/getAllFollowing';
 import { headers } from '../App';
 import shuffleArray from '../utils/shuffleArray';
 import { PostType } from '../types';
